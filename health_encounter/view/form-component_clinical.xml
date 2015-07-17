@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Clinical" />
+    </xpath>
+    <xpath expr="//label[@name=&quot;notes&quot;]" position="before">
+        <group id="clinic_signs" colspan="12">
+            <field name="signs_symptoms" mode="tree,form" view_ids="health_encounter.tree_signs_and_symptoms,health_encounter.form_signs_and_symptoms" height="140" />
+        </group>
+        <newline />
+    </xpath>
+
+    <xpath expr="//field[@name=&quot;notes&quot;]" position="after">
+        <newline />
+        <group id="clinic_diag_diag" colspan="12" string="Presumptive Diagnosis" col="6">
+            <field name="diagnosis" colspan="6" xexpand="1" />
+        </group>
+        <newline />
+        <!-- <group id="clinic_second_and_ddx" colspan="12" col="12"> -->
+            <field name="diagnostic_hypothesis" colspan="6" height="140" />
+            <field name="secondary_conditions" colspan="6" height="140" />
+        <!-- </group> -->
+        <newline />
+        <group id="clinic_treatment_procs" string="Treatment Plan" colspan="12" col="12">
+            <!-- <label name="treatment_plan" colspan="12" height="15" /> <newline /> -->
+            <field name="treatment_plan" colspan="12" height="130" />
+        </group>
+            <field name="procedures" colspan="12" height="140" />
+    </xpath>
+
+    <xpath expr="//field[@name=&quot;notes&quot;]" position="replace">
+        <group id="clinical_notes" string="Clinical Notes" colspan="12">
+            <field name="notes" yexpand="1" xexpand="1" colspan="12" height="160"/>
+        </group>
+    </xpath>
+    <xpath expr="//label[@name=&quot;notes&quot;]" position="replace">
+    </xpath>
+</data>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="Component">
+    <group id="encounter_header" col="8">
+        <field name="encounter" colspan="6" />
+        <field name="critical_info" invisible="1" />
+        <field name="is_union_comp" invisible="1" />
+    </group>
+    <notebook>
+        <page id="page_component_summary" string="Summary" col="6"
+            states="{'invisible': Not(Bool(Eval('critical_info')))}">
+            <field name="critical_info" colspan="6" />
+            <newline />
+            <label name="report_info" xalign="0" xexpand="1" />
+            <newline />
+            <field name="report_info" colspan="6" />
+        </page>
+        <page id="page_component_form" string="Details" col="12" 
+            states="{'invisible': Bool(Eval('is_union_comp'))}">
+
+            <!-- Most components will insert their form here -->
+
+            <label name="notes" xexpand="1" xalign="0" />
+            <newline />
+            <field name="notes" yexpand="1" />
+        </page>
+
+    </notebook>
+    <newline />
+    <group id="component_buttons" rowspan="2" col="8">
+        <label name="performed_by" />
+        <field name="performed_by" />
+        <label name="start_time" />
+        <field name="start_time" />
+        <newline />
+        <label name="signed_by" />
+        <field name="signed_by" />
+        <label name="sign_time" />
+        <field name="sign_time" />
+    </group>
+</form>

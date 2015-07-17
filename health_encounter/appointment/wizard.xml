@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- Wizard that initialises the Encounter based on the appointment -->
+        <record model="ir.action.wizard" id="act_appointment_encounter_starter">
+            <field name="name">Go to Patient Encounter</field>
+            <field name="wiz_name">gnuhealth.appointment.encounter_wizard</field>
+        </record>
+
+        <!-- Window and view to launch the Encounter view at the form -->
+        <record model="ir.action.act_window" id="actwin_appt_encounter">
+            <field name="name">Patient Encounter</field>
+            <field name="res_model">gnuhealth.encounter</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_appt_encounter_form">
+            <field name="view" ref="health_encounter.health_view_form_encounter"/>
+            <field name="sequence" eval="10"/>
+            <field name="act_window" ref="actwin_appt_encounter"/>
+        </record>
+        <record model="ir.action.keyword" id="act_create_app_encounter_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">gnuhealth.appointment,-1</field>
+            <field name="action" ref="act_appointment_encounter_starter"/>
+        </record>
+
+        <record model="ir.action.keyword" id="health.act_create_app_evaluation_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">gnuhealth.appointment,-2</field>
+            <field name="action" ref="health.act_create_patient_evaluation"/>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree string="Patient Encounters">
+    <field name="upi" />
+    <field name="patient" expand="1" />
+    <field name="start_time" />
+    <field name="institution" />
+    <field name="state" />
+    <field name="signed_by" />
+</tree>

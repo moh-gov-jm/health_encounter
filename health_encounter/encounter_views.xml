@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+    <data>
+        <!-- Certificate/Sign Icon -->
+        <record model="ir.ui.icon" id="gnuhealth_icon_certify">
+            <field name="name">health-certify</field>
+            <field name="path">icons/application-certificate.svg</field>
+        </record>
+        <!-- Add and minus icons -->
+        <record model="ir.ui.icon" id="gnuhealth_icon_list_add">
+            <field name="name">health-list-add</field>
+            <field name="path">icons/list-add.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="gnuhealth_icon_list_remove">
+            <field name="name">health-list-remove</field>
+            <field name="path">icons/list-remove.svg</field>
+        </record>
+        <!-- Encounter Views -->
+        <record model="ir.ui.view" id="health_view_tree_encounter">
+            <field name="model">gnuhealth.encounter</field>
+            <field name="type">tree</field>
+            <field name="name">tree_encounter</field>
+        </record>
+        <record model="ir.ui.view" id="health_view_form_encounter">
+            <field name="model">gnuhealth.encounter</field>
+            <field name="type">form</field>
+            <field name="name">form_encounter</field>
+        </record>
+
+        <record model="ir.action.act_window" id="health_actwin_encounter">
+            <field name="name">Patient Encounters</field>
+            <field name="res_model">gnuhealth.encounter</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="health_actview_encounter_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="health_view_tree_encounter"/>
+            <field name="act_window" ref="health_actwin_encounter"/>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_gnuhealth_patient_rounding_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="health_view_form_encounter"/>
+            <field name="act_window" ref="health_actwin_encounter"/>
+        </record>
+
+        <menuitem action="health_actwin_encounter"
+            id="health_menu_encounter_main" icon="gnuhealth-list"
+            parent="health.gnuhealth_menu" />
+
+        <!-- Encounter Component Chooser Wizard View -->
+        <record model="ir.ui.view" id="health_form_component_chooser">
+            <field name="model">gnuhealth.encounter.component_chooser</field>
+            <field name="type">form</field>
+            <field name="name">form-component_chooser</field>
+        </record>
+
+        <!-- Encounter Component Wizard -->
+        <record model="ir.action.wizard" id="health_wizard_encounter_edit_component">
+            <field name="name">Edit Component</field>
+            <field name="wiz_name">gnuhealth.encounter.component_editor.wizard</field>
+        </record>
+
+        <!-- Encounter Component Tree -->
+        <record model="ir.ui.view" id="health_view_tree_encounter_component">
+            <field name="model">gnuhealth.encounter.component</field>
+            <field name="type">tree</field>
+            <field name="name">tree_components</field>
+        </record>
+
+        <!-- Encounter Component Base Form -->
+        <record model="ir.ui.view" id="health_view_form_encounter_component">
+            <field name="model">gnuhealth.encounter.component</field>
+            <field name="type">form</field>
+            <field name="name">form-component_base</field>
+        </record>
+        <record model="ir.action.act_window" id="health_actwin_encounter_base">
+            <field name="name">Component</field>
+            <field name="res_model">gnuhealth.encounter.component</field>
+        </record>
+        <record model="ir.action.act_window.view" id="health_act_encounter_component">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="health_view_form_encounter_component"/>
+            <field name="act_window" ref="health_actwin_encounter_base"/>
+        </record>
+
+        <!-- And tree action for the encounter itself -->
+-        <record model="ir.action.keyword" id="act_encounter_component_tree_chooser">
+-            <field name="action" ref="health_wizard_encounter_edit_component"/>
+-            <field name="keyword">tree_open</field>
+-            <field name="model">gnuhealth.encounter,-1</field>
+-        </record>
+
+        <!-- Link to the Encounter from the Patient -->
+        <record model="ir.action.act_window" id="actwin_encounter_perpatient">
+            <field name="name">Encounters</field>
+            <field name="res_model">gnuhealth.encounter</field>
+            <field name="domain">[('patient', '=', Eval('active_id'))]</field>
+        </record>
+        <record model="ir.action.keyword" id="actkw_open_patient_encounters">
+            <field name="keyword">form_relate</field>
+            <field name="model">gnuhealth.patient,-1</field>
+            <field name="action" ref="actwin_encounter_perpatient"/>
+        </record>
+        
+        <!-- And disable the link to Evaluations -->
+        <record model="ir.action.keyword" id="health.act_open_evaluation_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">gnuhealth.patient,-2</field>
+            <field name="action" ref="health.act_evaluation_form1"/>
+        </record>
+
+    </data>
+</tryton>

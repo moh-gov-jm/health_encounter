@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree keyword_open="1" sequence="start_time">
+    <field name="id" tree_invisible="1" />
+    <field name="component_type" />
+    <field name="start_time_time" />
+    <field name="critical_info" expand="1" />
+    <field name="signed_by" />
+    <button string="Open" name="btn_open" />
+    <field name="start_time" tree_invisible="1" />
+</tree>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Nursing (Ambulatory)" />
+    </xpath>
+    <xpath expr="//label[@name=&quot;notes&quot;]" position="before">
+        <group colspan="12" col="6" string="Vital Signs" id="group_vital_signs">
+            <label name="temperature"/>
+            <field name="temperature"/>
+            <label name="systolic"/>
+            <field name="systolic"/>
+            <label name="diastolic"/>
+            <field name="diastolic"/>
+            <label name="bpm"/>
+            <field name="bpm"/>
+            <label name="respiratory_rate"/>
+            <field name="respiratory_rate"/>
+            <label name="osat"/>
+            <field name="osat"/>
+        </group>
+        <newline/>
+        <group colspan="12" string="Nutrition" id="group_patient_evaluation_nutrition" col="6">
+            <label name="malnutrition"/>
+            <field name="malnutrition"/>
+            <label name="dehydration"/>
+            <field name="dehydration"/>
+            <label id="dehy_spacer" string=" " xalign="1.0" xexpand="1" colspan="2" />
+        </group>
+        <newline/>
+        <group colspan="12" col="6" string="Glucose and Lipids Profile" id="group_patient_evaluation_glucose_lipid">
+            <label name="glycemia"/>
+            <field name="glycemia"/>
+            <label name="hba1c"/>
+            <field name="hba1c"/>
+            <label name="cholesterol_total"/>
+            <field name="cholesterol_total"/>
+            <label name="hdl"/>
+            <field name="hdl"/>
+            <label name="ldl"/>
+            <field name="ldl"/>
+            <label name="tag"/>
+            <field name="tag"/>
+        </group>
+        <newline />
+    </xpath>
+</data>

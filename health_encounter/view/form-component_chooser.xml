@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="Select Component Type">
+    <group col="4" id="compchooser_select">
+        <label name="component_type" />
+        <field name="component_type" />
+    </group>
+</form>

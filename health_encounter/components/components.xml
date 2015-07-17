@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+    <data>
+        <!-- Anthopometry Component Form -->
+        <record model="ir.ui.view" id="health_view_form_encounter_anthropometry">
+            <field name="inherit" ref="health_view_form_encounter_component" />
+            <field name="model">gnuhealth.encounter.anthropometry</field>
+            <field name="type">form</field>
+            <field name="name">form-component_anthro</field>
+        </record>
+        <record model="ir.action.act_window" id="health_actwin_encounter_anthropometry">
+            <field name="name">Anthropometry</field>
+            <field name="res_model">gnuhealth.encounter.anthropometry</field>
+        </record>
+        <record model="ir.action.act_window.view" id="health_act_encounter_component_anthropometry">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="health_view_form_encounter_anthropometry"/>
+            <field name="act_window" ref="health_actwin_encounter_anthropometry"/>
+        </record>
+        <record model="gnuhealth.encounter.component_type" id="component_default_anthropometry">
+            <field name="name">Anthropometry</field>
+            <field name="code">Anthro</field>
+            <field name="model">gnuhealth.encounter.anthropometry</field>
+            <field name="view_form">health_encounter.health_view_form_encounter_anthropometry</field>
+            <field name="ordering" eval="100" />
+            <field name="active" eval="True" />
+        </record>
+
+        <!-- Clinical Component Form -->
+        <record model="ir.ui.view" id="health_view_form_encounter_clinical">
+            <field name="inherit" ref="health_view_form_encounter_component" />
+            <field name="model">gnuhealth.encounter.clinical</field>
+            <field name="type">form</field>
+            <field name="name">form-component_clinical</field>
+        </record>
+        <record model="ir.action.act_window" id="health_actwin_encounter_clinical">
+            <field name="name">Clinical</field>
+            <field name="res_model">gnuhealth.encounter.clinical</field>
+        </record>
+        <record model="ir.action.act_window.view" id="health_act_encounter_component_clinical">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="health_view_form_encounter_clinical"/>
+            <field name="act_window" ref="health_actwin_encounter_clinical"/>
+        </record>
+        <record model="gnuhealth.encounter.component_type" id="component_default_clinical">
+            <field name="name">Clinical</field>
+            <field name="code">Clinical</field>
+            <field name="model">gnuhealth.encounter.clinical</field>
+            <field name="view_form">health_encounter.health_view_form_encounter_clinical</field>
+            <field name="ordering" eval="10" />
+            <field name="active" eval="True" />
+        </record>
+        <!-- fix up signs and symptoms in clinical screen -->
+        <record model="ir.ui.view" id="form_signs_and_symptoms">
+            <field name="model">gnuhealth.signs_and_symptoms</field>
+            <field name="type">form</field>
+            <field name="name">form-signs_symptoms</field>
+            <field name="inherit" eval="None" />
+        </record>
+        <record model="ir.ui.view" id="tree_signs_and_symptoms">
+            <field name="model">gnuhealth.signs_and_symptoms</field>
+            <field name="type">tree</field>
+            <field name="name">tree-signs_symptoms</field>
+            <field name="inherit" eval="None" />
+        </record>
+
+        <!-- Ambulatory Component Form -->
+        <record model="ir.ui.view" id="health_view_form_encounter_ambulatory">
+            <field name="inherit" ref="health_view_form_encounter_component" />
+            <field name="model">gnuhealth.encounter.ambulatory</field>
+            <field name="type">form</field>
+            <field name="name">form-component_ambulatory</field>
+        </record>
+        <record model="ir.action.act_window" id="health_actwin_encounter_ambulatory">
+            <field name="name">Nursing (Ambulatory)</field>
+            <field name="res_model">gnuhealth.encounter.ambulatory</field>
+            <field name="type">ir.action.act_window</field>
+        </record>
+        <record model="ir.action.act_window.view" id="health_act_encounter_component_ambulatory">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="health_view_form_encounter_ambulatory"/>
+            <field name="act_window" ref="health_actwin_encounter_ambulatory"/>
+        </record>
+        <record model="gnuhealth.encounter.component_type" id="component_default_ambulatory">
+            <field name="name">Nursing (Ambulatory)</field>
+            <field name="code">Nursing</field>
+            <field name="model">gnuhealth.encounter.ambulatory</field>
+            <field name="view_form">health_encounter.health_view_form_encounter_ambulatory</field>
+            <field name="ordering" eval="10" />
+            <field name="active" eval="True" />
+        </record>
+    </data>
+</tryton>
