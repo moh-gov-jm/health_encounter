@@ -27,8 +27,7 @@
             states="{'invisible': Not(Equal(Eval('state'), 'in_progress'))}">
             <field name="summary" />
         </page>
-        <page id="nbpage_encounter_hidden" string="Appointment"
-            states="{'invisible':0}" col="2">
+        <page id="nbpage_encounter_hidden" string="Appointment" col="2">
             <label name="appointment" />
             <field name="appointment" readonly="1" />
             <label name="next_appointment" />
@@ -49,8 +48,7 @@
     <group col="6" id="g_encounter_action" >
         <label name="institution" />
         <field name="institution" colspan="2" />
-        <field name="state" width="80" 
-            states="{'invisible': Equal(Eval('state'), 'signed')}" />
+        <field name="state" width="80" />
         <button name="sign_finish" help="Sign this encounter." string="Sign" icon="tryton-go-next" confirm="Having validated this encounter, do you want to sign it?"/>
         <button name="set_done" help="Set the encounter as being done." string="Finish" icon="tryton-go-next" confirm="Do you want to end this encounter?"/>
         <label name="signed_by" />

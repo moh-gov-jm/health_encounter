@@ -21,7 +21,8 @@ class PatientEncounter(ModelSQL, ModelView):
          ('done', 'Done'),
          ('signed', 'Signed'),
          ('invalid', 'Invalid')],
-        'State', readonly=True, sort=False)
+        'State', readonly=True, sort=False,
+        states={'invisible': Equal(Eval('state'), 'signed')})
     patient = fields.Many2One('gnuhealth.patient', 'Patient', required=True,
                               states=STATES)
     primary_complaint = fields.Char('Primary complaint', states=STATES)
