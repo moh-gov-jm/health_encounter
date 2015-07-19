@@ -50,17 +50,24 @@ the evaluation or, the supervisor would sign it.
 
 This is by no means complete. Nor do we think it's quite ready for production. There is a lot of testing to be done and we are currently trying it out with real doctors in real clinics. 
 
+### Automatic update of patient data
+
+Certain patient information is useful to have during a regular consultation.
+Much of this information is collected in the `Critical Information` box.
+Appropriate components should push updates to this section as necessary.
 
 ### Data Import and *Evaluation Robot*
 
 In order to use this in production, we will have to develop an import routine to get data out of Evaluations into Encounters and Components
 
-Currently, an Evaluation record can be entirely represented using the base components
+Currently, an Evaluation record can be entirely represented using the base components. Because of this, and because other things in GNU Health are related
+to Evaluations, the idea is to use a *Robot* to create Evaluation records
+every time an Encounter is created.
 
 ### Additional Components
 
-* Would be nice to have at least one part of the Opthalmology module show itself as a component
-* A few dental related Components
+* Would be nice to have at least one part of the **Opthalmology** module show itself as a component
+* A few **dental** related Components
 
 ### Health Encounter Crypto
 
