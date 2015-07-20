@@ -2,7 +2,7 @@ from datetime import datetime
 from trytond.model import ModelView, ModelSQL, fields, UnionMixin
 from trytond.pyson import Eval, Bool, Not
 from trytond.pool import Pool
-from trytond.modules.health_jamaica import tryton_utils as utils
+from .. import utils
 from ..encounter_component_type import EncounterComponentType
 
 

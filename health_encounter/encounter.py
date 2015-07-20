@@ -3,7 +3,7 @@ from datetime import datetime
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pyson import Eval, Not, Equal, Or, Greater, In
 from trytond.modules.health import HealthInstitution, HealthProfessional
-from trytond.modules.health_jamaica import tryton_utils as utils
+from . import utils
 
 
 class PatientEncounter(ModelSQL, ModelView):
