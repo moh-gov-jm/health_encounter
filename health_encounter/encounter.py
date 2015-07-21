@@ -75,7 +75,8 @@ class PatientEncounter(ModelSQL, ModelView):
         })
 
         cls._buttons.update({
-            'set_done': {'invisible': Not(Equal(Eval('state'), 'in_progress'))},
+            'set_done': {'invisible': Not(Equal(Eval('state'), 'in_progress')),
+                         'readonly': Greater(0, Eval('id', -1))},
             'sign_finish': {'invisible': Not(Equal(Eval('state'), 'done'))},
             'add_component': {'readonly': Or(Greater(0, Eval('id', -1)),
                                              In(Eval('state'),

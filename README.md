@@ -20,6 +20,19 @@ tryton and then it will show up in the modules list for installation.
 You need at least the health module from GNU Health and its dependencies in
 order to install this.
 
+## Usage
+
+* An Encounter record can be created from a form-action on appointments or directly using the relate link on the patient.
+* Any component may be edited and saved many times.
+* Components must be signed before the encounter can be ended
+* Once signed components and encounters become read-only
+
+**Issues and Caveats**
+
+* If you double-click or use the default tryton-open on a Component within an Encounter, you will not get the details tab. If there's a way to rewire the default action, please let us know
+* before a component can be added, the Encounter object must be saved. This is so the components have a rel component to link to.
+* you must select the component before the open button will respond, requiring 2 clicks to open a component for editing.
+
 ## Design Idea
 
 We have broken down the Evaluation into smaller pieces. Each piece is represented by its own model. All the different pieces follow some basic patterns that allow us to re-combine them using the UnionMixin mixin in Tryton 3.4.
@@ -49,6 +62,14 @@ the evaluation or, the supervisor would sign it.
 ## Further Development
 
 This is by no means complete. Nor do we think it's quite ready for production. There is a lot of testing to be done and we are currently trying it out with real doctors in real clinics. 
+
+### User Groups and Permissions
+
+My team has a fairly good understanding of the permissions system in Tryton. So we will add some default permissions to the module soon. These default persmissions will use the default groups and users created by GNU Health.
+
+### Workflows
+
+It was suggested that we look at implementing some Workflows for this to allow better flow and supervisory oversight. Neither I nor any of my team members understand the workflow system within Tryton. If anyone can help with that... thanks
 
 ### Automatic update of patient data
 
