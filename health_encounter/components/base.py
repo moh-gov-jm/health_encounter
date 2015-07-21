@@ -90,15 +90,6 @@ class BaseComponent(ModelSQL, ModelView):
         pass
         # save the component and set the state to done
 
-    # @classmethod
-    # def view_header_get(cls, value, view_type=None):
-
-    #     print '*'*70
-    #     print 'Value = %s \n--------------\nview-type = %s' %(repr(value), repr(view_type))
-    #     print 'Context = %s' % repr(Transaction().context)
-    #     print '*'*70
-    #     return super(BaseComponent, cls).view_header_get(value, view_type)
-
 
 class EncounterComponent(UnionMixin, BaseComponent):
     '''Component

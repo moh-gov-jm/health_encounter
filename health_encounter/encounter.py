@@ -29,7 +29,7 @@ class PatientEncounter(ModelSQL, ModelView):
     start_time = fields.DateTime('Start', required=True, states=STATES)
     end_time = fields.DateTime('End', states=STATES)
     institution = fields.Many2One('gnuhealth.institution', 'Institution',
-                                  required=True)
+                                  required=True, states=STATES)
     appointment = fields.Many2One(
         'gnuhealth.appointment', 'Appointment',
         domain=[('patient', '=', Eval('patient'))], depends=['patient'],
@@ -51,10 +51,9 @@ class PatientEncounter(ModelSQL, ModelView):
                                  'Components')
     summary = fields.Function(fields.Text('Summary'), 'get_encounter_summary')
     # Patient identifier fields
-    upi = fields.Function(fields.Char('UPI'), 'get_person_patient_field')
+    upi = fields.Function(fields.Char('UPI'), 'get_upi_mrn')
     medical_record_num = fields.Function(
-        fields.Char('Medical Record Number'),
-        'get_person_patient_field')
+        fields.Char('Medical Record Number'), 'get_upi_mrn')
     sex_display = fields.Function(fields.Char('Sex'),
                                   'get_person_patient_field')
     age = fields.Function(fields.Char('Age'), 'get_person_patient_field')
@@ -147,10 +146,19 @@ class PatientEncounter(ModelSQL, ModelView):
         return ' '.join(line)
 
     def get_person_patient_field(self, name):
-        if name in ['upi', 'sex_display', 'medical_record_num']:
-            return getattr(self.patient.name, name)
+        if name in ['sex_display']:
+            sex = getattr(self.patient.name, name,
+                          getattr(self.patient.name, 'sex', '?'))
+            return len(sex) == 1 and sex.upper() or sex
         if name in ['age']:
             return getattr(self.patient, name)
+        return ''
+
+    def get_upi_mrn(self, name):
+        if name == 'upi':
+            return self.patient.get_patient_puid('puid')
+        elif name == 'medical_record_num':
+            return getattr(self.patient, 'medical_record_num', '')
         return ''
 
     def get_encounter_summary(self, name):

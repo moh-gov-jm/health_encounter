@@ -201,7 +201,6 @@ class EncounterAmbulatory(BaseComponent):
             line.append(u'breath %d' % self.respiratory_rate)
         if self.osat:
             line.append(u'ox %d' % self.osat)
-        print(repr(line))
         return u", ".join(line)
 
     def get_report_info(self, name):
