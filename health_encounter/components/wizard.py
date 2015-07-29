@@ -42,7 +42,8 @@ class ChooseComponentTypeView(ModelView):
     'Choose Component'
     __name__ = 'gnuhealth.encounter.component_chooser'
     component_type = fields.Selection('component_type_selection',
-                                      'Component Type', required=True)
+                                      'Component Type', required=True,
+                                      sort=False)
 
     @classmethod
     def component_type_selection(cls):
