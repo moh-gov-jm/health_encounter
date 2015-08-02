@@ -59,7 +59,7 @@ setup(
     ],
 
     package_data={
-        'trytond.modules.health': info.get('xml', [])
+        'trytond.modules.health_encounter': info.get('xml', [])
             + info.get('translation', [])
             + ['tryton.cfg', 'view/*.xml', 'doc/*.rst', 'locale/*.po',
                'report/*.odt', 'icons/*.svg'],
