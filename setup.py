@@ -84,7 +84,7 @@ setup(
     entry_points="""
     [trytond.modules]
     health_encounter = trytond.modules.health_encounter
-    """
-    # test_suite='tests',
-    # test_loader='trytond.test_loader:Loader',
+    """,
+    test_suite='tests',
+    test_loader='trytond.test_loader:Loader',
 )
