@@ -1,6 +1,8 @@
-# Health Encounter
+Health Encounter
+================
 
-## Introduction
+Introduction
+-------------
 
 This Python package is a Tryton module that is desiged to work with GNU Health.
 
@@ -11,7 +13,8 @@ Appointment. However, the Evaluation reports have not yet been updated.
 It is very much a work in progress. Please see below for the reasoning behind 
 its design. 
 
-## Installation
+Installation
+--------------
 
 No installer yet. Please copy or symlink the health_encounter folder within the
 repository into the trytond/modules/ folder. After that, update any module in
@@ -20,20 +23,23 @@ tryton and then it will show up in the modules list for installation.
 You need at least the health module from GNU Health and its dependencies in
 order to install this.
 
-## Usage
+Usage
+-------
 
 * An Encounter record can be created from a form-action on appointments or directly using the relate link on the patient.
 * Any component may be edited and saved many times.
 * Components must be signed before the encounter can be ended
 * Once signed components and encounters become read-only
 
-**Issues and Caveats**
+Issues and Caveats
+~~~~~~~~~~~~~~~~~~~~
 
 * If you double-click or use the default tryton-open on a Component within an Encounter, you will not get the details tab. If there's a way to rewire the default action, please let us know
 * before a component can be added, the Encounter object must be saved. This is so the components have a rel component to link to.
 * you must select the component before the open button will respond, requiring 2 clicks to open a component for editing.
 
-## Design Idea
+Design Idea
+-------------
 
 We have broken down the Evaluation into smaller pieces. Each piece is represented by its own model. All the different pieces follow some basic patterns that allow us to re-combine them using the UnionMixin mixin in Tryton 3.4.
 
@@ -59,25 +65,30 @@ the evaluation or, the supervisor would sign it.
 4. We have many different services in Primary care. Using the components concept, we can make specialised forms for a variety of services. They can then be mixed and matched as needed.
 5. There are times when serial readings of vital signs are done in what is effectively a single encounter.
 
-## Further Development
+Further Development
+--------------------
 
 This is by no means complete. Nor do we think it's quite ready for production. There is a lot of testing to be done and we are currently trying it out with real doctors in real clinics. 
 
-### User Groups and Permissions
+User Groups and Permissions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 My team has a fairly good understanding of the permissions system in Tryton. So we will add some default permissions to the module soon. These default persmissions will use the default groups and users created by GNU Health.
 
-### Workflows
+Workflows
+~~~~~~~~~~
 
 It was suggested that we look at implementing some Workflows for this to allow better flow and supervisory oversight. Neither I nor any of my team members understand the workflow system within Tryton. If anyone can help with that... thanks
 
-### Automatic update of patient data
+Automatic update of patient data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Certain patient information is useful to have during a regular consultation.
 Much of this information is collected in the `Critical Information` box.
 Appropriate components should push updates to this section as necessary.
 
-### Data Import and *Evaluation Robot*
+Data Import and *Evaluation Robot*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to use this in production, we will have to develop an import routine to get data out of Evaluations into Encounters and Components
 
@@ -85,16 +96,19 @@ Currently, an Evaluation record can be entirely represented using the base compo
 to Evaluations, the idea is to use a *Robot* to create Evaluation records
 every time an Encounter is created.
 
-### Additional Components
+Additional Components
+~~~~~~~~~~~~~~~~~~~~~~
 
 * Would be nice to have at least one part of the **Opthalmology** module show itself as a component
 * A few **dental** related Components
 
-### Health Encounter Crypto
+Health Encounter Crypto
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 This module is still at the concept stage. However, it is intended to add the digest and signature fields and functions to Encounter and Components.
 
-## Component Development
+Component Development
+----------------------
 
 To develop a new Component type. There are a few steps one will have to take. 
 
