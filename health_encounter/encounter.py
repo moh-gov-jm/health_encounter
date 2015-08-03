@@ -1,7 +1,7 @@
 
 from datetime import datetime
 from trytond.model import ModelView, ModelSQL, fields
-from trytond.pyson import Eval, Not, Equal, Or, Greater, In
+from trytond.pyson import Eval, Not, Equal, Or, Greater, In, Len
 from trytond.modules.health import HealthInstitution, HealthProfessional
 from . import utils
 
@@ -75,7 +75,8 @@ class PatientEncounter(ModelSQL, ModelView):
 
         cls._buttons.update({
             'set_done': {'invisible': Not(Equal(Eval('state'), 'in_progress')),
-                         'readonly': Greater(0, Eval('id', -1))},
+                         'readonly': Or(Greater(0, Eval('id', -1)),
+                                        Greater(1, Len(Eval('components'))))},
             'sign_finish': {'invisible': Not(Equal(Eval('state'), 'done'))},
             'add_component': {'readonly': Or(Greater(0, Eval('id', -1)),
                                              In(Eval('state'),

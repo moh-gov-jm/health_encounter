@@ -1,5 +1,5 @@
 
-from .base import (EncounterComponent, EncounterComponentType)
+from .base import (EncounterComponent, EncounterComponentType, BaseComponent)
 from .wizard import ChooseComponentTypeView, EditComponentWizard
 from .nursing import EncounterAnthro, EncounterAmbulatory
 from .clinical import (EncounterClinical, Directions, SecondaryCondition,

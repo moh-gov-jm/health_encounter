@@ -88,7 +88,7 @@
 -        <record model="ir.action.keyword" id="act_encounter_component_tree_chooser">
 -            <field name="action" ref="health_wizard_encounter_edit_component"/>
 -            <field name="keyword">tree_open</field>
--            <field name="model">gnuhealth.encounter,-1</field>
+-            <field name="model">gnuhealth.encounter.component,-1</field>
 -        </record>
 
         <!-- Link to the Encounter from the Patient -->
