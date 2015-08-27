@@ -39,7 +39,8 @@ for key in ('depends', 'extras_depend', 'xml'):
 
 requires = [
     'trytond>=%d.%d,<%d.%d' % tryton_version,
-    'trytond_health>=%d.%d,<%d.%d' % gnuhealth_version
+    'trytond_health>=%d.%d,<%d.%d' % gnuhealth_version,
+    'pytz>=2014.7'
 ]
 
 setup(
