@@ -68,8 +68,12 @@ class ComponentStateView(StateView):
         super(ComponentStateView, self).__init__(model_name, view_id, buttons)
 
     def get_defaults(self, wiz, state_name, fields):
-        _real_comp = wiz._component_data['obj']
-        return model2dict(_real_comp, fields)
+        _real_comp_data = wiz._component_data.get('obj_data', False)
+        if _real_comp_data:
+            return _real_comp_data
+        else:
+            _real_comp = wiz._component_data['obj']
+            return model2dict(_real_comp, fields)
 
 
 class CStateView(ComponentStateView):  # initialise a StateView from DB
@@ -106,7 +110,8 @@ class EditComponentWizard(Wizard):
                                 EncounterComponentType.get_selection_list()])
 
         self._component_data = {'model': active_model, 'active_id': active_id,
-                                'typenames': component_types}
+                                'typenames': component_types,
+                                'obj_data': None}
         real_component = None
         if active_model != 'gnuhealth.encounter':
             real_component = EncounterComponent.union_unshard(active_id)
@@ -148,10 +153,10 @@ class EditComponentWizard(Wizard):
         if 'id' in field_names:
             del field_names[field_names.index['id']]
         component_data.update(ComponentModel.default_get(field_names))
-
         real_component = ComponentModel(**component_data)
         setattr(self, statename, real_component)
-        self._component_data.update(obj=real_component)
+        self._component_data.update(obj=real_component,
+                                    obj_data=component_data)
         return statename
 
     def transition_sign_x(self):
