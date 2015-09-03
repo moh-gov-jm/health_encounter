@@ -1,5 +1,6 @@
 
-from .base import (EncounterComponent, EncounterComponentType, BaseComponent)
+from .base import (EncounterComponent, EncounterComponentType,
+                   BaseComponent, SIGNED_STATES)
 from .wizard import ChooseComponentTypeView, EditComponentWizard
 from .nursing import EncounterAnthro, EncounterAmbulatory
 from .clinical import (EncounterClinical, Directions, SecondaryCondition,

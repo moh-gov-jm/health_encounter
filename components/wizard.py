@@ -179,7 +179,7 @@ class EditComponentWizard(Wizard):
             compid = self._component_data['active_id']
             component = EncounterComponent.union_unshard(compid)
         state_model = getattr(self, state_name)
-        state_model.critical_info = state_model.make_critical_info()
+        state_model.pre_save()
         if component:
             component._values = state_model._values
             component.save()

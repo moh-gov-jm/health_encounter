@@ -77,6 +77,9 @@ class BaseComponent(ModelSQL, ModelView):
             comp.signed_by = health_prof_model.get_health_professional()
             comp.sign_time = signtime
 
+    def pre_save(self):
+        self.critical_info = self.make_critical_info()
+
     def on_change_with_critical_info(self, *arg, **kwarg):
         return self.make_critical_info()
 
