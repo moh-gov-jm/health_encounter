@@ -12,6 +12,7 @@ def register():
         EncounterAnthro,
         EncounterAmbulatory,
         EncounterClinical,
+        EncounterMentalStatus,
         Directions,
         SecondaryCondition,
         DiagnosticHypothesis,

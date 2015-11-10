@@ -89,5 +89,31 @@
             <field name="ordering" eval="10" />
             <field name="active" eval="True" />
         </record>
+
+        <!-- Mental Status Component Form -->
+        <record model="ir.ui.view" id="health_view_form_encounter_mentalstatus">
+            <field name="inherit" ref="health_view_form_encounter_component" />
+            <field name="model">gnuhealth.encounter.mental_status</field>
+            <field name="type">form</field>
+            <field name="name">form-component_mental_status</field>
+        </record>
+        <record model="ir.action.act_window" id="health_actwin_encounter_mentalstatus">
+            <field name="name">Mental Status</field>
+            <field name="res_model">gnuhealth.encounter.mental_status</field>
+            <field name="type">ir.action.act_window</field>
+        </record>
+        <record model="ir.action.act_window.view" id="health_act_encounter_component_mentalstatus">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="health_view_form_encounter_mentalstatus"/>
+            <field name="act_window" ref="health_actwin_encounter_mentalstatus"/>
+        </record>
+        <record model="gnuhealth.encounter.component_type" id="component_default_mentalstatus">
+            <field name="name">Mental Status</field>
+            <field name="code">MentalStatus</field>
+            <field name="model">gnuhealth.encounter.mental_status</field>
+            <field name="view_form">health_encounter.health_view_form_encounter_mentalstatus</field>
+            <field name="ordering" eval="10" />
+            <field name="active" eval="True" />
+        </record>
     </data>
 </tryton>

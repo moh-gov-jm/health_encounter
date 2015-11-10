@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Mental Status" />
+    </xpath>
+    <xpath expr="//label[@name=&quot;notes&quot;]" position="before">
+        <group colspan="12" col="4" string="Level of Consciousness (Glasgow Coma Scale)" id="group_loc">
+            <label name="loc" /><field name="loc" width="60" /><newline />
+            <label name="loc_eyes" /><field name="loc_eyes" /><newline />
+            <label name="loc_verbal" /><field name="loc_verbal" /><newline />
+            <label name="loc_motor" /><field name="loc_motor" />
+        </group>
+        <group id="group_mental_other" string="Mental Assessment and Impairments" colspan="12" col="4">
+            <label name="violent" /><field name="violent" />
+            <label name="mood" /><field name="mood" />
+            <label name="praxis" /><field name="praxis" />
+            <label name="tremor" /><field name="tremor" />
+            
+            <label name="orientation" /><field name="orientation" />
+            <label name="knowledge_current_events" /><field name="knowledge_current_events" />
+            
+            <label name="memory" /><field name="memory" />
+            <label name="judgement" /><field name="judgement" />
+            <label name="abstraction" /><field name="abstraction" />
+            
+            <label name="vocabulary" /><field name="vocabulary" />
+            <label name="calculation_ability" /><field name="calculation_ability" />
+            <label name="object_recognition" /><field name="object_recognition" />
+        </group>
+        <newline />
+    </xpath>
+</data>
