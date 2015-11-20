@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from trytond.pool import Pool
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pyson import Eval, Not, Equal, Or, Greater, In, Len
 from trytond.modules.health import HealthInstitution, HealthProfessional
@@ -85,6 +86,22 @@ class PatientEncounter(ModelSQL, ModelView):
         })
 
     @classmethod
+    def create(cls, vlist):
+        '''
+        update appointment, set state = processing when encounter is
+        first saved
+        '''
+        retval = super(PatientEncounter, cls).create(vlist)
+        Appointment = Pool().get('gnuhealth.appointment')
+        appointments = []
+        for encounter in vlist:
+            if encounter['appointment']:
+                appointments.append(encounter['appointment'])
+        appts = Appointment.browse(appointments)
+        Appointment.write(appts, {'state': 'processing'})
+        return retval
+
+    @classmethod
     @ModelView.button
     def sign_finish(cls, encounters):
         signing_hp = HealthProfessional().get_health_professional()
@@ -92,6 +109,10 @@ class PatientEncounter(ModelSQL, ModelView):
             cls.raise_user_error('health_professional_warning')
         #ToDO: set all the not-done components to DONE as well and sign
         # the unsigned ones
+        for encounter in encounters:
+            for comp in encounter.components:
+                if not comp.signed_by:
+                    cls.raise_user_error('unsigned_components')
 
         cls.write(encounters, {
             'state': 'signed',
@@ -104,17 +125,19 @@ class PatientEncounter(ModelSQL, ModelView):
     def set_done(cls, encounters):
         # Change the state of the evaluation to "Done"
         save_data = {'state': 'done'}
+        appointments = []  # appointments to be set to done
         for encounter in encounters:
             if not encounter.end_time:
                 cls.raise_user_error('end_date_required')
-            for comp in encounter.components:
-                if not comp.signed_by:
-                    cls.raise_user_error('unsigned_components')
             #     save_data.update(end_time=encounter.end_time)
             #     break
             # else:
+            if encounter.appointment:
+                appointments.append(encounter.appointment)
 
         cls.write(encounters, save_data)
+        Appointment = Pool().get('gnuhealth.appointment')
+        Appointment.write(appointments, {'state': 'done'})
 
     @classmethod
     @ModelView.button_action(
