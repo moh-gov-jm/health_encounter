@@ -24,7 +24,8 @@ def make_encounter(ev):
         'signed_by': ev.signed_by,
         'sign_time': ev.write_date,
         'institution': ev.institution,
-        'primary_complaint': ev.chief_complaint}
+        'primary_complaint': ev.chief_complaint, 
+        'fvty': ev.first_visit_this_year}
     components = []
     if ev.weight or ev.height or ev.abdominal_circ or ev.hip:
         comp = {
