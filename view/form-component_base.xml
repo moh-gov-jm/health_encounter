@@ -6,7 +6,7 @@
         <field name="is_union_comp" invisible="1" />
     </group>
     <notebook>
-        <page id="page_component_summary" string="Summary" col="6"
+        <page id="page_component_summary" string="Summar_y" col="6"
             states="{'invisible': Not(Bool(Eval('critical_info')))}">
             <field name="critical_info" colspan="6" />
             <newline />

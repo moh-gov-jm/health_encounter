@@ -58,7 +58,7 @@ class ComponentStateView(StateView):
         buttons = [
             Button('Cancel', 'end', 'tryton-cancel',
                    states={'invisible': Bool(Eval('signed_by'))}),
-            Button('Save', 'save_x', 'tryton-save', default=True,
+            Button('_Save', 'save_x', 'tryton-save', default=True,
                    states={'invisible': Bool(Eval('signed_by'))}),
             Button('Si_gn', 'sign_x', 'health-certify', states={
                    'invisible': Bool(Eval('signed_by'))}),

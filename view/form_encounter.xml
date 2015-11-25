@@ -16,14 +16,14 @@
         <field name="primary_complaint" colspan="3" />
     </group>
     <notebook>
-        <page id="nbpage_encounter_report_final" string="Summary"
+        <page id="nbpage_encounter_report_final" string="Summar_y"
             states="{'invisible': Equal(Eval('state'), 'in_progress')}">
             <field name="summary" />
         </page>
         <page id="nbpage_encounter_components" string="Components">
             <field name="components" readonly="1" mode="tree" view_ids="health_encounter.health_view_tree_encounter_component" />
         </page>
-        <page id="nbpage_encounter_report" string="Summary"
+        <page id="nbpage_encounter_report" string="Summar_y"
             states="{'invisible': Not(Equal(Eval('state'), 'in_progress'))}">
             <field name="summary" />
         </page>
@@ -49,8 +49,8 @@
         <label name="institution" />
         <field name="institution" colspan="2" />
         <field name="state" width="80" />
-        <button name="sign_finish" help="Sign this encounter." string="Sign" icon="tryton-go-next" confirm="Having validated this encounter, do you want to sign it?"/>
-        <button name="set_done" help="Set the encounter as being done." string="Finish" icon="tryton-go-next" confirm="Do you want to end this encounter?"/>
+        <button name="sign_finish" help="Sign this encounter." string="Si_gn" icon="tryton-go-next" confirm="Having validated this encounter, do you want to sign it?"/>
+        <button name="set_done" help="Set the encounter as being done." string="Finis_h" icon="tryton-go-next" confirm="Do you want to end this encounter?"/>
         <label name="signed_by" />
         <field name="signed_by" />
     </group>

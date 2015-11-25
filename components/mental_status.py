@@ -167,8 +167,10 @@ class EncounterMentalStatus(BaseComponent):
                   ('calculation_ability', 'Cannot do simple math'),
                   ('object_recognition', 'Object recognition problems'),
                   ('praxis', 'Unable to make voultary movements')]
-        lines.append(('=== Notes ==='))
-        lines.append((str(self.notes),))
+        notestext = str(self.notes)
+        if notestext:
+            lines.append(('=== Notes ===',))
+            lines.append((notestext,))
         for k, val in checks:
             if getattr(self, k):
                 lines.append((val,))
