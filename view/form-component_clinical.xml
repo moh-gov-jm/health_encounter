@@ -25,7 +25,6 @@
             <!-- <label name="treatment_plan" colspan="12" height="15" /> <newline /> -->
             <field name="treatment_plan" colspan="12" height="130" />
         </group>
-            <field name="procedures" colspan="12" height="140" />
     </xpath>
 
     <xpath expr="//field[@name=&quot;notes&quot;]" position="replace">

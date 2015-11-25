@@ -64,6 +64,31 @@
             <field name="inherit" eval="None" />
         </record>
 
+        <!-- Procedures Component Form -->
+        <record model="ir.ui.view" id="health_view_form_encounter_procedures">
+            <field name="inherit" ref="health_view_form_encounter_component" />
+            <field name="model">gnuhealth.encounter.procedures</field>
+            <field name="type">form</field>
+            <field name="name">form-component_procedures</field>
+        </record>
+        <record model="ir.action.act_window" id="health_actwin_encounter_procedures">
+            <field name="name">Procedures</field>
+            <field name="res_model">gnuhealth.encounter.procedures</field>
+        </record>
+        <record model="ir.action.act_window.view" id="health_act_encounter_component_procedures">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="health_view_form_encounter_procedures"/>
+            <field name="act_window" ref="health_actwin_encounter_procedures"/>
+        </record>
+        <record model="gnuhealth.encounter.component_type" id="component_default_procedures">
+            <field name="name">Procedures</field>
+            <field name="code">Procedures</field>
+            <field name="model">gnuhealth.encounter.procedures</field>
+            <field name="view_form">health_encounter.health_view_form_encounter_procedures</field>
+            <field name="ordering" eval="10" />
+            <field name="active" eval="True" />
+        </record>
+
         <!-- Ambulatory Component Form -->
         <record model="ir.ui.view" id="health_view_form_encounter_ambulatory">
             <field name="inherit" ref="health_view_form_encounter_component" />
