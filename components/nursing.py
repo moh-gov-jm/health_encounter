@@ -70,20 +70,25 @@ class EncounterAnthro(BaseComponent):
         return ['weight', 'height', 'hip', 'abdominal_circ']
 
     def make_critical_info(self):
+        citxt = []
         if self.weight and self.height:
-            citxt = ['%5.2f' % self.weight, 'kg', 'x',
-                     '%5.1f' % self.height, 'cm',
-                     '=', '(BMI) %5.2f' % self.bmi]
+            citxt.extend(['%5.2f' % self.weight, 'kg', 'x',
+                          '%5.1f' % self.height, 'cm',
+                          '=', '(BMI) %5.2f' % self.bmi])
         else:
-            citxt = []
+            if self.weight:
+                citxt.append('Weight: %5.2f' % self.weight)
+            if self.height:
+                citxt.append('Height: %5.2f' % self.height)
+
+        if self.abdominal_circ:
+            citxt.append('Waist: %5.2fcm' % self.abdominal_circ)
+        if self.hip:
             if self.abdominal_circ:
-                citxt.append('Waist: %5.2fcm' % self.abdominal_circ)
-            if self.hip:
-                if self.abdominal_circ:
-                    citxt.append('x')
-                citxt.append('Hip: %5.2fcm' % self.hip)
-            if self.whr:
-                citxt.append('= %5.2f' % self.whr)
+                citxt.append('x')
+            citxt.append('Hip: %5.2fcm' % self.hip)
+        if self.whr:
+            citxt.append('= %5.2f' % self.whr)
         # return a single line, no more than 140 chars to describe the details
         # of what's happening in the measurements in this component
         return ' '.join(citxt)
@@ -146,7 +151,7 @@ class EncounterAmbulatory(BaseComponent):
 
     hba1c = fields.Float(
         'Glycated Hemoglobin',
-        digits=(5,2),
+        digits=(5, 2),
         help='Last Glycated Hb level. Can be an approximate value.',
         states=SIGNED_STATES)
 

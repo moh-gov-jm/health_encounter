@@ -190,4 +190,3 @@ class PatientEncounter(ModelSQL, ModelView):
             real_component = component.union_unshard(component.id)
             summary_texts.append(real_component.report_info)
         return '\n\n'.join(summary_texts)
-
