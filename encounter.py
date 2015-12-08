@@ -38,8 +38,7 @@ class PatientEncounter(ModelSQL, ModelView):
         states=STATES)
     next_appointment = fields.Many2One(
         'gnuhealth.appointment', 'Next Appointment',
-        domain=['OR', ['AND', ('patient', '=', Eval('patient')),
-                       ('state', '=', 'confirmed')], ('state', '=', 'free')],
+        # domain=[('patient', '=', Eval('patient'))],
         depends=['patient'],
         states=SIGNED_STATES)
     signed_by = fields.Many2One(
@@ -95,7 +94,7 @@ class PatientEncounter(ModelSQL, ModelView):
         Appointment = Pool().get('gnuhealth.appointment')
         appointments = []
         for encounter in vlist:
-            if encounter['appointment']:
+            if encounter['appointment'] and not encounter.get('end_time'):
                 appointments.append(encounter['appointment'])
         appts = Appointment.browse(appointments)
         Appointment.write(appts, {'state': 'processing'})
@@ -191,3 +190,4 @@ class PatientEncounter(ModelSQL, ModelView):
             real_component = component.union_unshard(component.id)
             summary_texts.append(real_component.report_info)
         return '\n\n'.join(summary_texts)
+
