@@ -161,7 +161,7 @@ class EncounterProcedures(BaseComponent):
 
 # PATIENT EVALUATION DIRECTIONS
 class Directions(ModelSQL, ModelView):
-    'Patient Directions'
+    'Patient Procedures'
     __name__ = 'gnuhealth.directions'
 
     encounter_component = fields.Many2One('gnuhealth.encounter.procedures',
