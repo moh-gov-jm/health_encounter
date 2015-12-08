@@ -1,9 +1,10 @@
 # Stuff that translates evaluations to encounters
 from datetime import timedelta
 from trytond.modules.health.health import HealthInstitution
+from proteus import Model, config as pconfig
 
 DELAY = timedelta(0, 120)  # artificial 2 minute delay
-
+HERE = None
 
 def reductor(ev):
     def real_reductor(a, b):
@@ -13,6 +14,17 @@ def reductor(ev):
             return b
 
     return real_reductor
+
+def get_institution():
+    global HERE
+    if not HERE:
+        Company = Model.get('company.company')
+        company = Company(1)
+        HealthInstitution = Model.get('gnuhealth.institution')
+        institution, = HealthInstitution.find([('name', '=', company.party.id)])
+        HERE = institution.id
+    return HERE
+
 
 def Id(val):
     if val and hasattr(val, 'id'):
@@ -30,17 +42,17 @@ def make_encounter(ev):
     end_time = ev.evaluation_endtime
     insti = ev.institution
     if not insti:
-        insti = 140
+        insti = get_institution()
 
     encounter = {
         'patient': Id(ev.patient),
         'start_time': start_time,
         'end_time': end_time,
-        'state': ev.state,
+        'state': 'signed' if ev.state=='done' else ev.state,
         'appointment': Id(ev.evaluation_date),
         'next_appointment': Id(ev.next_evaluation),
         'signed_by': Id(ev.signed_by),
-        'sign_time': ev.write_date,
+        'sign_time': end_time,
         'institution': Id(insti),
         'primary_complaint': ev.chief_complaint,
         'fvty': ev.first_visit_this_year}
@@ -133,3 +145,24 @@ def create_encounter(ev, pool):
     ev.encounter = Encounter(enc)
     ev.save()
     return enc
+
+
+def convert_remaining_evaluations(db, passwd, conffile):
+    # setup proteus config
+    cfg = pconfig.set_trytond(db, user='admin', password=passwd,
+                              config_file=conffile)
+    Evaluation = Model.get('gnuhealth.patient.evaluation')
+    the_evals = Evaluation.find([('encounter', '=', None)])
+    encounters = []
+    bad_evals = []
+    for eva in the_evals:
+        try:
+            encounters.append(create_encounter(eva, Model))
+        except:
+            bad_evals.append(eva)
+
+    print '%d Encounters created.' % len(encounters)
+    if bad_evals:
+        print 'Some evaluations failed to convert (%d)' % len(bad_evals)
+
+    return encounters, bad_evals
