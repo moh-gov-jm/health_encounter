@@ -56,12 +56,12 @@ class ComponentStateView(StateView):
     appropriate instance of the component for creation or editing.'''
     def __init__(self, model_name, view_id):
         buttons = [
+            Button('Si_gn', 'sign_x', 'health-certify', states={
+                   'invisible': Bool(Eval('signed_by'))}),
             Button('Cancel', 'end', 'tryton-cancel',
                    states={'invisible': Bool(Eval('signed_by'))}),
             Button('_Save', 'save_x', 'tryton-save', default=True,
                    states={'invisible': Bool(Eval('signed_by'))}),
-            Button('Si_gn', 'sign_x', 'health-certify', states={
-                   'invisible': Bool(Eval('signed_by'))}),
             Button('Close', 'close_x', 'tryton-close',
                    states={'invisible': Not(Bool(Eval('signed_by')))})
         ]
