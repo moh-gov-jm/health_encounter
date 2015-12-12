@@ -31,7 +31,7 @@ class EncounterClinical(BaseComponent):
     secondary_conditions = fields.One2Many(
         'gnuhealth.secondary_condition',
         'clinical_component', 'Secondary Conditions',
-        help='Other, Secondary conditions found on the patient',
+        help='Other diseases treated in this encounter',
         states=STATES)
 
     diagnostic_hypothesis = fields.One2Many(
@@ -77,12 +77,6 @@ class EncounterClinical(BaseComponent):
                           DASHER])
         if self.diagnosis:
             lines.append(('Presumptive Diagnosis:', self.diagnosis.rec_name))
-        if self.treatment_plan:
-            lines.extend([('Treatment Plan:', ),
-                          ('\n'.join(filter(None,
-                                            self.treatment_plan.split('\n'))), ),
-                          DASHER])
-
         if self.secondary_conditions:
             lines.extend(
                 flip_one2many('Secondary Conditions found on the patient',
@@ -94,6 +88,12 @@ class EncounterClinical(BaseComponent):
                 flip_one2many('Diagnostic Hypothesis',
                               self.diagnostic_hypothesis, 'pathology')
             )
+        if self.treatment_plan:
+            lines.extend([('Treatment Plan:', ),
+                          ('\n'.join(filter(None,
+                                            self.treatment_plan.split('\n'))), ),
+                          DASHER])
+
 
 
         return '\n'.join([' '.join(x) for x in lines])

@@ -190,3 +190,25 @@ class PatientEncounter(ModelSQL, ModelView):
             real_component = component.union_unshard(component.id)
             summary_texts.append(real_component.report_info)
         return '\n\n'.join(summary_texts)
+
+    def real_component(self, name=None):
+        '''retuns the real component objects.
+        Always returns a list of objects.
+        If name not provided returns all real components
+        name can be the name of the model or the shortname displayed
+        on screen case insensitive.
+        '''
+        comps = [(x.component_type, x.union_unshard(x.id))
+                 for x in self.components]
+        typedict = {}
+        real_comps = []
+        # modeldict = {}
+        for i, (comptype, comp) in enumerate(comps):
+            typedict.setdefault(comptype.lower(), []).append(i)
+            # modeldict # ToDo: Figure out how to get at the model
+            # name from an instance
+            real_comps.append(comp)
+        if name:
+            return [real_comps[i] for i in typedict.get(name, [])]
+        else:
+            return real_comps
