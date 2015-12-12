@@ -179,7 +179,7 @@ class PatientEncounter(ModelSQL, ModelView):
 
     def get_upi_mrn(self, name):
         if name == 'upi':
-            return self.patient.get_patient_puid('puid')
+            return self.patient.puid
         elif name == 'medical_record_num':
             return getattr(self.patient, 'medical_record_num', '')
         return ''
