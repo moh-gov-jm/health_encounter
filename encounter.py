@@ -11,9 +11,7 @@ class PatientEncounter(ModelSQL, ModelView):
     'Patient Encounter'
     __name__ = 'gnuhealth.encounter'
 
-    STATES = {'readonly': Or(Equal(Eval('state'), 'signed'),
-                             Equal(Eval('state'), 'done'),
-                             Equal(Eval('state'), 'invalid'))}
+    STATES = {'readonly': In(Eval('state'), ['signed', 'done', 'invalid'])}
     SIGNED_STATES = {'readonly': Equal(Eval('state'), 'signed')}
     SIGNED_VISIBLE = {'invisible': Not(Equal(Eval('state'), 'signed'))}
 

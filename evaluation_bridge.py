@@ -100,15 +100,34 @@ def make_encounter(ev):
                        'diagnostic_hypothesis', 'secondary_conditions',
                        'signs_and_symptoms']
     if reduce(reducer, clinical_fields):
-        comp = {'model': 'gnuhealth.encounter.clinical',
-                'diagnosis': Id(ev.diagnosis)}
-        for comp_field, ev_field in [('diagnostic_hypothesis', 'diagnostic_hypothesis'),
-                                     ('secondary_conditions', 'secondary_conditions'),
-                                     ('signs_symptoms', 'signs_and_symptoms')]:
-            ev_fld_data = getattr(ev, ev_field)
-            if ev_fld_data:
-                comp[comp_field] = [('add',
-                                    [x.id for x in ev_fld_data])]
+        comp = {'model': 'gnuhealth.encounter.clinical'}
+                # 'diagnosis': Id(ev.diagnosis)}
+        if ev.diagnosis:  # regular properly coded evaluation
+            comp.update(diagnosis=Id(ev.diagnosis))
+            for comp_field, ev_field in [
+                    ('diagnostic_hypothesis', 'diagnostic_hypothesis'),
+                    ('secondary_conditions', 'secondary_conditions'),
+                    ('signs_symptoms', 'signs_and_symptoms')]:
+                ev_fld_data = getattr(ev, ev_field)
+                if ev_fld_data:
+                    comp[comp_field] = [('add',
+                                        [x.id for x in ev_fld_data])]
+        else:  # we have to figure it out from the DDx and 2ndary
+            ddx = ev.diagnostic_hypothesis
+            if len(ddx) >= 1:  # single DDx and no presumptive?
+                comp.update(diagnosis=Id(ddx[0].pathology),
+                            newly_diagnosed=ddx[0].first_diagnosis)
+            if len(ddx) > 1:  # convert the rest to secondary conditions
+                comp.update(
+                    secondary_conditions=[
+                        ('create', [{'pathology': Id(x.pathology),
+                                     'comments':x.comments,
+                                     'newly_diagnosed': x.first_diagnosis}
+                                    for x in ddx[1:]]
+                        )
+                    ]
+                )
+
         comp_notes = filter(None, [ev.info_diagnosis, ev.notes])
         comp['notes'] = '\n'.join(comp_notes)
         comp['treatment_plan'] = ev.directions
