@@ -1,6 +1,11 @@
 Health Encounter
 ================
 
+:Organization: Ministry of Health - Jamaica
+:Date: August 2015
+:Authors: Marc Murray <murraym@moh.gov.jm>
+:Copyright: 2014-2015 Ministry of Health - Jamaica
+
 Introduction
 -------------
 
