@@ -47,6 +47,11 @@ class EncounterClinical(BaseComponent):
         states=STATES)
     treatment_plan = fields.Text('Treatment Plan', states=STATES)
 
+    @classmethod
+    def __setup__(cls):
+        super(EncounterClinical, cls).__setup__()
+        cls.notes.help = 'Clinical history and examination findings'
+
     def make_critical_info(self):
         out = []
         if self.signs_symptoms:
