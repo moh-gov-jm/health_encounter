@@ -114,16 +114,16 @@ def make_encounter(ev):
                                         [x.id for x in ev_fld_data])]
         else:  # we have to figure it out from the DDx and 2ndary
             ddx = ev.diagnostic_hypothesis
-            if len(ddx) >= 1:  # single DDx and no presumptive?
+            if len(ddx) == 1:  # single DDx and no presumptive?
                 comp.update(diagnosis=Id(ddx[0].pathology),
                             newly_diagnosed=ddx[0].first_diagnosis)
-            if len(ddx) > 1:  # convert the rest to secondary conditions
+            elif len(ddx) > 1:  # convert the rest to secondary conditions
                 comp.update(
                     secondary_conditions=[
                         ('create', [{'pathology': Id(x.pathology),
                                      'comments':x.comments,
                                      'newly_diagnosed': x.first_diagnosis}
-                                    for x in ddx[1:]]
+                                    for x in ddx]
                         )
                     ]
                 )
