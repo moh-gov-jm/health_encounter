@@ -15,6 +15,7 @@ class PatientEncounter(ModelSQL, ModelView):
     SIGNED_STATES = {'readonly': Equal(Eval('state'), 'signed')}
     SIGNED_VISIBLE = {'invisible': Not(Equal(Eval('state'), 'signed'))}
 
+    active = fields.Boolean('Active')
     state = fields.Selection(
         [('in_progress', 'In progress'),
          ('done', 'Done'),
@@ -155,6 +156,10 @@ class PatientEncounter(ModelSQL, ModelView):
     @staticmethod
     def default_state():
         return 'in_progress'
+
+    @staticmethod
+    def default_active():
+        return True
 
     def get_crypto_enabled(self, name):
         return False
