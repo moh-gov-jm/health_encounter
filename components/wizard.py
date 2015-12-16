@@ -123,8 +123,6 @@ class ComponentStateView(StateView):
     view = property(_get_view_id, _set_view_id)
 
     def set_modelview(self, type_id, model_name=None):
-        tact = Transaction()
-        print "Fetching model, transaction.context = %s" % repr(tact.context)
         self.current_model_view = get_component_modelview(type_id, model_name)
 
 
