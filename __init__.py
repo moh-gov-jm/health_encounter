@@ -7,8 +7,8 @@ from .appointment import CreateAppointmentEncounter
 
 def register():
     Pool.register(
-        EncounterComponentType,
         PatientEncounter,
+        EncounterComponentType,
         EncounterAnthro,
         EncounterAmbulatory,
         EncounterClinical,

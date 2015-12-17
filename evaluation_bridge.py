@@ -144,7 +144,8 @@ def make_encounter(ev):
             performed_by=Id(ev.healthprof),
             signed_by=Id(ev.signed_by),
             start_time=start_time,
-            end_time=end_time
+            end_time=end_time,
+            sign_time=end_time
         )
     return (encounter, components)
 

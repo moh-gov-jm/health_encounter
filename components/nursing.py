@@ -4,9 +4,9 @@ from trytond.model import fields
 from .base import BaseComponent, SIGNED_STATES
 
 
-METRIC_CONV={
-    'length': (1/2.54),
-    'weight':2.20462262
+METRIC_CONV = {
+    'length': (1 / 2.54),
+    'weight': 2.20462262
 }
 
 
@@ -98,33 +98,32 @@ class EncounterAnthro(BaseComponent):
         if self.height:
             lines.append(
                 ['* Height: %7.2fcm' % (self.height),
-                '(%2.0fft %2.0fin)' % divmod(self.height * METRIC_CONV['length'],
-                                             12)])
+                 '(%2.0fft %2.0fin)' %
+                    divmod(self.height * METRIC_CONV['length'], 12)])
         if self.weight:
             lines.append(
-                ['* Weight: %7.2fkg'%(self.weight),
-                 '(%5.2flbs)'%(self.weight * METRIC_CONV['weight'])])
+                ['* Weight: %7.2fkg' % (self.weight),
+                 '(%5.2flbs)' % (self.weight * METRIC_CONV['weight'])])
         if self.abdominal_circ:
             lines.append(
-                ['* Waist: %7.2f'%(self.abdominal_circ),
-                 '(%5.2fin)'%(self.abdominal_circ * METRIC_CONV['length'])])
+                ['* Waist: %7.2f' % (self.abdominal_circ),
+                 '(%5.2fin)' % (self.abdominal_circ * METRIC_CONV['length'])])
         if self.hip:
-            lines.append(['* Hip: %7.2f'%(self.hip),
-                          '(%5.2fin)'%(self.hip * METRIC_CONV['length'])])
+            lines.append(['* Hip: %7.2f' % (self.hip),
+                          '(%5.2fin)' % (self.hip * METRIC_CONV['length'])])
         if self.head_circumference:
-            lines.append(['* Head : %7.2f'%(self.head_circumference),
-             '(%5.2fin)'%(self.head_circumference * METRIC_CONV['length'])])
+            lines.append(['* Head : %7.2f' % (self.head_circumference),
+             '(%5.2fin)' % (self.head_circumference * METRIC_CONV['length'])])
 
         if self.whr or self.bmi:
             lines.append(('',))
             if self.bmi:
-                lines.append(['* Body Mass Index: %7.2f'%(self.bmi)])
+                lines.append(['* Body Mass Index: %7.2f' % (self.bmi)])
             if self.whr:
-                lines.append(['* Waist to Hip Ratio: %5.2f'%(self.whr)])
+                lines.append(['* Waist to Hip Ratio: %5.2f' % (self.whr)])
         if self.notes:
             lines.extend([('\n=== Notes ===',), (str(self.notes), )])
         return '\n'.join([' '.join(x) for x in lines])
-
 
 
 class EncounterAmbulatory(BaseComponent):
@@ -224,6 +223,8 @@ class EncounterAmbulatory(BaseComponent):
         lines = [['== Vital Signs ==']]
         if self.dehydration:
             lines.append(('* Dehydrated:', self.dehydration))
+        if self.malnutrition:
+            lines.append(('* Malnourished',))
         if self.temperature:
             lines.append((u'* Temperature:', u'%4.2f°C' % self.temperature))
         if self.systolic and self.diastolic:
@@ -237,6 +238,18 @@ class EncounterAmbulatory(BaseComponent):
             lines.append(('* Oxygen Saturation: %d' % self.osat, ))
 
         # ToDo: Put in the Glucose and Lipids fields
+        if self.glycemia:
+            lines.append(('* Glycemia:', '%4.2f' % self.glycemia))
+        if self.hba1c:
+            lines.append(('* Glycated Hemoglobin:', '%4.2f' % self.hba1c))
+        if self.cholesterol_total:
+            lines.append(('* Last Cholesterol:', '%d' % self.cholesterol_total))
+        if self.hdl:
+            lines.append(('* Last HDL:', '%d' % self.hdl))
+        if self.ldl:
+            lines.append(('* Last LDL:', '%d' % self.ldl))
+        if self.tag:
+            lines.append(('* Last TAGs:', '%d' % self.tag))
 
         if self.notes:
             lines.extend([['\n=== Notes ==='], [str(self.notes)]])
