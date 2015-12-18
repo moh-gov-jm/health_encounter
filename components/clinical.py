@@ -126,6 +126,12 @@ class SecondaryCondition(RewireEvaluationPointer, ModelView):
 class DiagnosticHypothesis(RewireEvaluationPointer, ModelView):
     'Other Diagnostic Hypothesis'
     __name__ = 'gnuhealth.diagnostic_hypothesis'
+    first_diagnosis = fields.Boolean('First diagnosis', 
+            help='First time being diagnosed with this ailment')
+
+    @staticmethod
+    def default_first_diagnosis():
+        return False
 
 
 # PATIENT EVALUATION CLINICAL FINDINGS (SIGNS AND SYMPTOMS)
