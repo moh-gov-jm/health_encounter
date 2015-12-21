@@ -15,7 +15,7 @@ class PatientEncounter(ModelSQL, ModelView):
     SIGNED_STATES = {'readonly': Equal(Eval('state'), 'signed')}
     SIGNED_VISIBLE = {'invisible': Not(Equal(Eval('state'), 'signed'))}
 
-    active = fields.Boolean('Active')
+    active = fields.Boolean('Active', select=True)
     state = fields.Selection(
         [('in_progress', 'In progress'),
          ('done', 'Done'),
@@ -23,8 +23,9 @@ class PatientEncounter(ModelSQL, ModelView):
          ('invalid', 'Invalid')],
         'State', readonly=True, sort=False,
         states={'invisible': Equal(Eval('state'), 'signed')})
-    patient = fields.Many2One('gnuhealth.patient', 'Patient', required=True,
-                              states=STATES)
+    patient = fields.Many2One(
+        'gnuhealth.patient', 'Patient', required=True,
+        states={'readonly': Eval('id', 0) > 0})
     primary_complaint = fields.Char('Primary complaint', states=STATES)
     start_time = fields.DateTime('Start', required=True, states=STATES)
     end_time = fields.DateTime('End', states=STATES)

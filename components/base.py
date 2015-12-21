@@ -14,7 +14,7 @@ class BaseComponent(ModelSQL, ModelView):
     '''All components should inherit from this class. It's not a real
     model as it is not registered in the pool. It defines the fields
     needed for a model to be a valid component. '''
-    active = fields.Boolean('Active')
+    active = fields.Boolean('Active', select=True)
     encounter = fields.Many2One('gnuhealth.encounter', 'Encounter',
                                 readonly=True, required=True)
     start_time = fields.DateTime('Start', required=True, states=SIGNED_STATES)
