@@ -33,6 +33,15 @@ class CreateAppointmentEncounter(OneAppointmentWizard):
     start_state = 'goto_encounter'
     goto_encounter = StateAction('health_encounter.actwin_appt_encounter')
 
+    @classmethod
+    def __setup__(cls):
+        super(CreateAppointmentEncounter, cls).__setup__()
+        cls._error_messages.update({
+            'appointment_no_institution':
+            'This appointment does not specify an institution.\n'
+            'An Encounter cannot be created.',
+        })
+
     def do_goto_encounter(self, action):
 
         pool = Pool()
@@ -53,7 +62,11 @@ class CreateAppointmentEncounter(OneAppointmentWizard):
             rd = {'active_id': encounter[0].id}
             action['res_id'] = rd['active_id']
         else:
-            institution = appointment.institution.id
+            if appointment.institution:
+                institution = appointment.institution.id
+            else:
+                self.raise_user_error('appointment_no_institution')
+
             rd = {}
 
             action['pyson_domain'] = PYSONEncoder().encode([
