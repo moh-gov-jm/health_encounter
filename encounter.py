@@ -50,6 +50,8 @@ class PatientEncounter(ModelSQL, ModelView):
     components = fields.One2Many('gnuhealth.encounter.component', 'encounter',
                                  'Components')
     summary = fields.Function(fields.Text('Summary'), 'get_encounter_summary')
+    short_summary = fields.Function(fields.Text('Summary'),
+                                    'get_short_summary')
     # Patient identifier fields
     upi = fields.Function(fields.Char('UPI'), 'get_upi_mrn')
     medical_record_num = fields.Function(
@@ -195,6 +197,14 @@ class PatientEncounter(ModelSQL, ModelView):
             summary_texts.append(real_component.report_info)
         return '\n\n'.join(summary_texts)
 
+    def get_short_summary(self, name):
+        summary_texts = []
+        for component in self.components:
+            summary_texts.append((component.component_type,
+                                  component.critical_info))
+        return '\n'.join([': '.join(x) for x in summary_texts])
+
+# critical_info
     def real_component(self, name=None):
         '''retuns the real component objects.
         Always returns a list of objects.
