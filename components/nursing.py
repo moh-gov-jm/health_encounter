@@ -72,8 +72,8 @@ class EncounterAnthro(BaseComponent):
     def make_critical_info(self):
         citxt = []
         if self.weight and self.height:
-            citxt.extend(['%5.2f' % self.weight, 'kg', 'x',
-                          '%5.1f' % self.height, 'cm',
+            citxt.extend(['W: %5.2f' % self.weight, 'kg,',
+                          'H: %5.1f' % self.height, 'cm',
                           '=', '(BMI) %5.2f' % self.bmi])
         else:
             if self.weight:
