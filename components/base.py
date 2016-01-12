@@ -102,7 +102,7 @@ class BaseComponent(ModelSQL, ModelView):
             nom = obj.performed_by.name.name
             if obj.signed_by and obj.signed_by != obj.performed_by:
                 nom = '%s (%s)' % (nom, obj.signed_by.name.name)
-            return '*on %s by %s*' % (dt, nom)
+            return 'on %s by %s' % (dt, nom)
         return dict([(i.id, mk_byline(i)) for i in instances])
 
     @classmethod

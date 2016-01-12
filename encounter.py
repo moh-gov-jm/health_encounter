@@ -207,17 +207,18 @@ class PatientEncounter(ModelSQL, ModelView):
 
     def get_encounter_summary(self, name):
         summary_texts = []
-        header_re = re.compile('^(=+) ([^=]+) (=+)$')
+        # header_re = re.compile('^(=+) ([^=]+) (=+)$')
         for component in self.components:
             real_component = component.union_unshard(component.id)
             report_info = real_component.report_info.split('\n')
-            if header_re.match(report_info[0]):
-                header = filter(None, header_re.split(report_info[0]))
-                header.insert(-1, real_component.byline)
-                report_info[0] = ' '.join(header)
-            else:
-                report_info.insert(1, real_component.byline)
+            # if header_re.match(report_info[0]):
+            #     header = filter(None, header_re.split(report_info[0]))
+            #     header.insert(-1, real_component.byline)
+            #     report_info[0] = ' '.join(header)
+            # else:
+            report_info.insert(1, real_component.byline)
             summary_texts.append('\n'.join(report_info))
+            # TODO: Show extra components differently from regular ones
         return '\n\n'.join(summary_texts)
 
     def get_short_summary(self, name):
