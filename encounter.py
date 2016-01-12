@@ -1,4 +1,5 @@
 
+import re
 from datetime import datetime
 from trytond.pool import Pool
 from trytond.model import ModelView, ModelSQL, fields
@@ -83,7 +84,10 @@ class PatientEncounter(ModelSQL, ModelView):
             'add_component': {'readonly': Or(Greater(0, Eval('id', -1)),
                                              In(Eval('state'),
                                                 ['done', 'signed', 'invalid'])),
-                              'invisible': Equal(Eval('state'), 'signed')}
+                              'invisible': Equal(Eval('state'), 'signed')},
+            'add_extra_component': {
+                'invisible': In(Eval('state'),
+                                ['signed', 'in_progress', 'invalid'])}
         })
 
     @classmethod
@@ -110,6 +114,7 @@ class PatientEncounter(ModelSQL, ModelView):
             cls.raise_user_error('health_professional_warning')
         #ToDO: set all the not-done components to DONE as well and sign
         # the unsigned ones
+        # No! Components should be individually signed.
         for encounter in encounters:
             for comp in encounter.components:
                 if not comp.signed_by:
@@ -129,10 +134,12 @@ class PatientEncounter(ModelSQL, ModelView):
         appointments = []  # appointments to be set to done
         for encounter in encounters:
             if not encounter.end_time:
-                cls.raise_user_error('end_date_required')
-            #     save_data.update(end_time=encounter.end_time)
-            #     break
-            # else:
+                cls.raise_user_warning(
+                    'encounter_end_date_warn',
+                    'End time has not been set.\nDo you want to use the'
+                    ' current date and time?')
+                save_data.update(end_time=datetime.now())
+
             if encounter.appointment:
                 appointments.append(encounter.appointment)
 
@@ -144,6 +151,14 @@ class PatientEncounter(ModelSQL, ModelView):
     @ModelView.button_action(
         'health_encounter.health_wizard_encounter_edit_component')
     def add_component(cls, components, *a, **k):
+        hp = HealthProfessional.get_health_professional()
+        if not hp:
+            cls.raise_user_error('health_professional_warning')
+
+    @classmethod
+    @ModelView.button_action(
+        'health_encounter.health_wizard_encounter_edit_component')
+    def add_extra_component(cls, components, *a, **k):
         hp = HealthProfessional.get_health_professional()
         if not hp:
             cls.raise_user_error('health_professional_warning')
@@ -192,9 +207,17 @@ class PatientEncounter(ModelSQL, ModelView):
 
     def get_encounter_summary(self, name):
         summary_texts = []
+        header_re = re.compile('^(=+) ([^=]+) (=+)$')
         for component in self.components:
             real_component = component.union_unshard(component.id)
-            summary_texts.append(real_component.report_info)
+            report_info = real_component.report_info.split('\n')
+            if header_re.match(report_info[0]):
+                header = filter(None, header_re.split(report_info[0]))
+                header.insert(-1, real_component.byline)
+                report_info[0] = ' '.join(header)
+            else:
+                report_info.insert(1, real_component.byline)
+            summary_texts.append('\n'.join(report_info))
         return '\n\n'.join(summary_texts)
 
     def get_short_summary(self, name):
@@ -204,13 +227,12 @@ class PatientEncounter(ModelSQL, ModelView):
                                   component.critical_info))
         return '\n'.join([': '.join(x) for x in summary_texts])
 
-# critical_info
     def real_component(self, name=None):
         '''retuns the real component objects.
         Always returns a list of objects.
         If name not provided returns all real components
         name can be the name of the model or the shortname displayed
-        on screen case insensitive.
+        on screen, case insensitive.
         '''
         comps = [(x.component_type, x.union_unshard(x.id))
                  for x in self.components]

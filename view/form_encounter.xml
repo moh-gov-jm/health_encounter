@@ -41,6 +41,8 @@
         <field name="end_time" />
         <button name="add_component" string="A_dd component"
             icon="health-list-add"/>
+        <button name="add_extra_component" string="Add E_xtra component"
+            icon="health-list-add"/>
         <label name="sign_time" />
         <field name="sign_time" />
     </group>

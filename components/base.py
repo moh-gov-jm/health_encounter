@@ -35,6 +35,9 @@ class BaseComponent(ModelSQL, ModelView):
     report_info = fields.Function(fields.Text('Report'), 'get_report_info')
     is_union_comp = fields.Function(fields.Boolean('Unified component'),
                                     'get_is_union')
+    byline = fields.Function(fields.Char('Byline',
+                             help='date started, clinician and signer'),
+                             'get_byline')
 
     @classmethod
     def __setup__(cls):
@@ -93,6 +96,16 @@ class BaseComponent(ModelSQL, ModelView):
         return datetime.now()
 
     @classmethod
+    def get_byline(cls, instances, name):
+        def mk_byline(obj):
+            dt = obj.start_time.strftime('%Y-%m-%d %H:%M')
+            nom = obj.performed_by.name.name
+            if obj.signed_by and obj.signed_by != obj.performed_by:
+                nom = '%s (%s)' % (nom, obj.signed_by.name.name)
+            return '*on %s by %s*' % (dt, nom)
+        return dict([(i.id, mk_byline(i)) for i in instances])
+
+    @classmethod
     @ModelView.button
     def mark_done(cls, components):
         pass
@@ -131,9 +144,11 @@ class EncounterComponent(UnionMixin, BaseComponent):
         thelist = EncounterComponentType.get_selection_list()
         return [x[3] for x in thelist]
 
-    def get_start_time_time(self, name):
+    @classmethod
+    def get_start_time_time(cls, instances, name):
         # return self.start_time.strftime('%H:%M')
-        return utils.localtime(self.start_time).time()
+        gstt = lambda x: utils.localtime(x.start_time).time()
+        return dict([(i.id, gstt(i)) for i in instances])
 
     def get_component_type_name(self, name):
         id_names = EncounterComponentType.get_selection_list()
