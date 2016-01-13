@@ -72,58 +72,58 @@ class EncounterAnthro(BaseComponent):
     def make_critical_info(self):
         citxt = []
         if self.weight and self.height:
-            citxt.extend(['W: %5.2f' % self.weight, 'kg,',
-                          'H: %5.1f' % self.height, 'cm',
-                          '=', '(BMI) %5.2f' % self.bmi])
+            citxt.extend([u'W: %5.2f' % self.weight, 'kg,',
+                          u'H: %5.1f' % self.height, 'cm',
+                          u'=', '(BMI) %5.2f' % self.bmi])
         else:
             if self.weight:
-                citxt.append('Weight: %5.2f' % self.weight)
+                citxt.append(u'Weight: %5.2f' % self.weight)
             if self.height:
-                citxt.append('Height: %5.2f' % self.height)
+                citxt.append(u'Height: %5.2f' % self.height)
 
         if self.abdominal_circ:
-            citxt.append('Waist: %5.2fcm' % self.abdominal_circ)
+            citxt.append(u'Waist: %5.2fcm' % self.abdominal_circ)
         if self.hip:
             if self.abdominal_circ:
-                citxt.append('x')
-            citxt.append('Hip: %5.2fcm' % self.hip)
+                citxt.append(u'x')
+            citxt.append(u'Hip: %5.2fcm' % self.hip)
         if self.whr:
-            citxt.append('= %5.2f' % self.whr)
+            citxt.append(u'= %5.2f' % self.whr)
         # return a single line, no more than 140 chars to describe the details
         # of what's happening in the measurements in this component
         return ' '.join(citxt)
 
     def get_report_info(self, name):
-        lines = [('== Anthropometric Measurements ==',)]
+        lines = [(u'== Anthropometric Measurements ==',)]
         if self.height:
             lines.append(
-                ['* Height: %7.2fcm' % (self.height),
-                 '(%2.0fft %2.0fin)' %
+                [u'* Height: %7.2fcm' % (self.height),
+                 u'(%2.0fft %2.0fin)' %
                     divmod(self.height * METRIC_CONV['length'], 12)])
         if self.weight:
             lines.append(
-                ['* Weight: %7.2fkg' % (self.weight),
-                 '(%5.2flbs)' % (self.weight * METRIC_CONV['weight'])])
+                [u'* Weight: %7.2fkg' % (self.weight),
+                 u'(%5.2flbs)' % (self.weight * METRIC_CONV['weight'])])
         if self.abdominal_circ:
             lines.append(
-                ['* Waist: %7.2f' % (self.abdominal_circ),
-                 '(%5.2fin)' % (self.abdominal_circ * METRIC_CONV['length'])])
+                [u'* Waist: %7.2f' % (self.abdominal_circ),
+                 u'(%5.2fin)' % (self.abdominal_circ * METRIC_CONV['length'])])
         if self.hip:
-            lines.append(['* Hip: %7.2f' % (self.hip),
-                          '(%5.2fin)' % (self.hip * METRIC_CONV['length'])])
+            lines.append([u'* Hip: %7.2f' % (self.hip),
+                          u'(%5.2fin)' % (self.hip * METRIC_CONV['length'])])
         if self.head_circumference:
-            lines.append(['* Head : %7.2f' % (self.head_circumference),
-             '(%5.2fin)' % (self.head_circumference * METRIC_CONV['length'])])
+            lines.append([u'* Head : %7.2f' % (self.head_circumference),
+            u'(%5.2fin)' % (self.head_circumference * METRIC_CONV['length'])])
 
         if self.whr or self.bmi:
             lines.append(('',))
             if self.bmi:
-                lines.append(['* Body Mass Index: %7.2f' % (self.bmi)])
+                lines.append([u'* Body Mass Index: %7.2f' % (self.bmi)])
             if self.whr:
-                lines.append(['* Waist to Hip Ratio: %5.2f' % (self.whr)])
+                lines.append([u'* Waist to Hip Ratio: %5.2f' % (self.whr)])
         if self.notes:
-            lines.extend([('\n=== Notes ===',), (str(self.notes), )])
-        return '\n'.join([' '.join(x) for x in lines])
+            lines.extend([(u'\n=== Notes ===',), (unicode(self.notes), )])
+        return u'\n'.join([u' '.join(x) for x in lines])
 
 
 class EncounterAmbulatory(BaseComponent):
@@ -220,37 +220,37 @@ class EncounterAmbulatory(BaseComponent):
         return u", ".join(line)
 
     def get_report_info(self, name):
-        lines = [['== Vital Signs ==']]
+        lines = [[u'== Vital Signs ==']]
         if self.dehydration:
-            lines.append(('* Dehydrated:', self.dehydration))
+            lines.append((u'* Dehydrated:', self.dehydration))
         if self.malnutrition:
-            lines.append(('* Malnourished',))
+            lines.append((u'* Malnourished',))
         if self.temperature:
             lines.append((u'* Temperature:', u'%4.2f°C' % self.temperature))
         if self.systolic and self.diastolic:
-            lines.append(('* Blood Pressure:',
-                          '%3.0f/%3.0f' % (self.systolic, self.diastolic)))
+            lines.append((u'* Blood Pressure:',
+                          u'%3.0f/%3.0f' % (self.systolic, self.diastolic)))
         if self.bpm:
-            lines.append(('* Heart Rate:', '%dbpm' % self.bpm, ))
+            lines.append((u'* Heart Rate:', '%dbpm' % self.bpm, ))
         if self.respiratory_rate:
             lines.append(('* Respiratory Rate: %d' % self.respiratory_rate, ))
         if self.osat:
-            lines.append(('* Oxygen Saturation: %d' % self.osat, ))
+            lines.append((u'* Oxygen Saturation: %d' % self.osat, ))
 
         # ToDo: Put in the Glucose and Lipids fields
         if self.glycemia:
-            lines.append(('* Glycemia:', '%4.2f' % self.glycemia))
+            lines.append((u'* Glycemia:', '%4.2f' % self.glycemia))
         if self.hba1c:
-            lines.append(('* Glycated Hemoglobin:', '%4.2f' % self.hba1c))
+            lines.append((u'* Glycated Hemoglobin:', '%4.2f' % self.hba1c))
         if self.cholesterol_total:
-            lines.append(('* Last Cholesterol:', '%d' % self.cholesterol_total))
+            lines.append((u'* Last Cholesterol:', '%d' % self.cholesterol_total))
         if self.hdl:
-            lines.append(('* Last HDL:', '%d' % self.hdl))
+            lines.append((u'* Last HDL:', '%d' % self.hdl))
         if self.ldl:
-            lines.append(('* Last LDL:', '%d' % self.ldl))
+            lines.append((u'* Last LDL:', '%d' % self.ldl))
         if self.tag:
-            lines.append(('* Last TAGs:', '%d' % self.tag))
+            lines.append((u'* Last TAGs:', '%d' % self.tag))
 
         if self.notes:
-            lines.extend([['\n=== Notes ==='], [str(self.notes)]])
+            lines.extend([[u'\n=== Notes ==='], [unicode(self.notes)]])
         return u'\n'.join([u' '.join(x) for x in lines])

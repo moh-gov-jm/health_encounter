@@ -8,11 +8,11 @@ def flip_one2many(title, o2mlist, fld, fld_name='rec_name'):
     mylines = []
     if o2mlist:
         if title:
-            mylines.append(('%s:' % title, ))
+            mylines.append((u'%s:' % title, ))
         for p in o2mlist:
-            pline = ('   *', getattr(getattr(p, fld), fld_name))
+            pline = (u'   *', getattr(getattr(p, fld), fld_name))
             if getattr(p, 'comments', False):
-                pline += ('-', p.comments)
+                pline += (u'-', p.comments)
             mylines.append(pline)
         return mylines
     return None
@@ -57,51 +57,49 @@ class EncounterClinical(BaseComponent):
         if self.signs_symptoms:
             citxt = ', '.join([x.clinical.code for x in self.signs_symptoms])
             if citxt:
-                out.append('Signs: %s' % citxt)
+                out.append(u'Signs: %s' % citxt)
         if self.diagnosis:
             out.append(self.diagnosis.rec_name)
         if self.diagnostic_hypothesis:
-            citxt = ', '.join([x.pathology.code
-                              for x in self.diagnostic_hypothesis])
+            citxt = u', '.join([x.pathology.code
+                                for x in self.diagnostic_hypothesis])
             if citxt and self.diagnosis:
-                out.append('or %s' % citxt)
+                out.append(u'or %s' % citxt)
             else:
-                out.append('DDx: %s' % citxt)
+                out.append(u'DDx: %s' % citxt)
         return '; '.join(out)
 
     def get_report_info(self, name):
-        lines = [('== Clinical ==',)]
+        lines = [(u'== Clinical ==',)]
         if self.signs_symptoms:
             lines.extend(
-                flip_one2many('Signs And Symptoms',
+                flip_one2many(u'Signs And Symptoms',
                               self.signs_symptoms, 'clinical')
             )
         if self.notes:
-            lines.extend([('Clinical Notes:', ),
-                          ('\n'.join(filter(None, self.notes.split('\n'))), ),
+            lines.extend([(u'Clinical Notes:', ),
+                          (u'\n'.join(filter(None, self.notes.split('\n'))), ),
                           DASHER])
         if self.diagnosis:
-            lines.append(('Presumptive Diagnosis:', self.diagnosis.rec_name))
+            lines.append((u'Presumptive Diagnosis:', self.diagnosis.rec_name))
         if self.secondary_conditions:
             lines.extend(
-                flip_one2many('Secondary Conditions found on the patient',
+                flip_one2many(u'Secondary Conditions found on the patient',
                               self.secondary_conditions, 'pathology')
             )
 
         if self.diagnostic_hypothesis:
             lines.extend(
-                flip_one2many('Diagnostic Hypothesis',
+                flip_one2many(u'Diagnostic Hypothesis',
                               self.diagnostic_hypothesis, 'pathology')
             )
         if self.treatment_plan:
-            lines.extend([('Treatment Plan:', ),
-                          ('\n'.join(filter(None,
-                                            self.treatment_plan.split('\n'))), ),
+            lines.extend([(u'Treatment Plan:', ),
+                          (u'\n'.join(
+                           filter(None, self.treatment_plan.split('\n'))), ),
                           DASHER])
 
-
-
-        return '\n'.join([' '.join(x) for x in lines])
+        return u'\n'.join([u' '.join(x) for x in lines])
 
 
 # Modification to GNU Health Default classes to point them here instead
@@ -144,14 +142,14 @@ class EncounterProcedures(BaseComponent):
         states=STATES)
 
     def get_report_info(self, name):
-        lines = [('== Procedures ==',)]
+        lines = [(u'== Procedures ==',)]
         if self.procedures:
             lines.extend(
                 flip_one2many(False, self.procedures, 'procedure')
             )
         if self.notes:
             lines.append((str(self.notes), ))
-        return '\n'.join([' '.join(x) for x in lines])
+        return u'\n'.join([' '.join(x) for x in lines])
 
     def make_critical_info(self):
         if self.procedures:
@@ -161,7 +159,7 @@ class EncounterProcedures(BaseComponent):
                 out = [x.procedure.name for x in self.procedures]
         else:
             out = []
-        return ', '.join(out)
+        return u', '.join(out)
 
 
 # PATIENT EVALUATION DIRECTIONS

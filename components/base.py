@@ -101,8 +101,8 @@ class BaseComponent(ModelSQL, ModelView):
             dt = obj.start_time.strftime('%Y-%m-%d %H:%M')
             nom = obj.performed_by.name.name
             if obj.signed_by and obj.signed_by != obj.performed_by:
-                nom = '%s (%s)' % (nom, obj.signed_by.name.name)
-            return 'on %s by %s' % (dt, nom)
+                nom = u'%s (%s)' % (nom, obj.signed_by.name.name)
+            return u'on %s by %s' % (dt, nom)
         return dict([(i.id, mk_byline(i)) for i in instances])
 
     @classmethod

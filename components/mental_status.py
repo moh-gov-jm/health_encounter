@@ -137,41 +137,41 @@ class EncounterMentalStatus(BaseComponent):
 
     def make_critical_info(self):
         '''returns that single line summary of the component data'''
-        out = ['Glasgow:', str(self.loc)]
+        out = [u'Glasgow:', unicode(self.loc)]
         if self.violent:
-            out.insert(0, 'Violent;')
+            out.insert(0, u'Violent;')
         if self.praxis:
-            out.append('Praxis')
-        return ' '.join(out)
+            out.append(u'Praxis')
+        return u' '.join(out)
 
     def get_report_info(self, name):
-        lines = [('== Mental Status ==',)]
+        lines = [(u'== Mental Status ==',)]
         if self.violent:
-            lines.append(('Violent:', 'YES'))
+            lines.append((u'Violent:', u'YES'))
         lines.append((
-            'Glasgow scale:', str(self.loc),
-            ' = %s(%s) + %s(%s) + %s(%s)' % (
+            u'Glasgow scale:', str(self.loc),
+            u' = %s(%s) + %s(%s) + %s(%s)' % (
                 get_val(LOC['eyes'], self.loc_eyes), self.loc_eyes,
                 get_val(LOC['verbal'], self.loc_verbal), self.loc_verbal,
                 get_val(LOC['motor'], self.loc_motor), self.loc_motor)
         ))
         if self.mood:
-            lines.append(('Mood:', get_val(MOODS, self.mood)))
-        checks = [('orientation', 'Disoriented'),
-                  ('memory', 'Has memory problems'),
+            lines.append((u'Mood:', get_val(MOODS, self.mood)))
+        checks = [('orientation', u'Disoriented'),
+                  ('memory', u'Has memory problems'),
                   ('knowledge_current_events',
-                   'Little or no knowledge of current events'),
-                  ('judgement', 'Cannot interpret basic scenarios'),
-                  ('abstraction', 'Abnormalities in abstract reasoning'),
-                  ('vocabulary', 'Lacks basic intellectual capacity'),
-                  ('calculation_ability', 'Cannot do simple math'),
-                  ('object_recognition', 'Object recognition problems'),
-                  ('praxis', 'Unable to make voultary movements')]
+                   u'Little or no knowledge of current events'),
+                  ('judgement', u'Cannot interpret basic scenarios'),
+                  ('abstraction', u'Abnormalities in abstract reasoning'),
+                  ('vocabulary', u'Lacks basic intellectual capacity'),
+                  ('calculation_ability', u'Cannot do simple math'),
+                  ('object_recognition', u'Object recognition problems'),
+                  ('praxis', u'Unable to make voultary movements')]
         notestext = str(self.notes)
         if notestext:
-            lines.append(('=== Notes ===',))
+            lines.append((u'=== Notes ===',))
             lines.append((notestext,))
         for k, val in checks:
             if getattr(self, k):
                 lines.append((val,))
-        return '\n'.join([' '.join(x) for x in lines])
+        return u'\n'.join([u' '.join(x) for x in lines])
