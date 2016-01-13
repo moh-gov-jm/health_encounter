@@ -68,8 +68,15 @@ class ChooseComponentTypeView(ModelView):
 
     @classmethod
     def component_type_selection(cls):
+        pool = Pool()
+        ModelAccess = pool.get('ir.model.access')
+        pdefault = {'create': False}  # default if model not found in access
         triple = EncounterComponentType.get_selection_list()
-        return [(name_fix(x[2]), x[1]) for x in triple]
+        model_access = ModelAccess.get_access([x[3] for x in triple])
+        # model access is a dict of dict with models and access
+        # trim the list to just the models you have access to
+        return [(name_fix(x[2]), x[1]) for x in triple
+                if model_access.get(x[3], pdefault).get('create', False)]
 
 
 class ComponentStateView(StateView):
@@ -162,16 +169,25 @@ class EditComponentWizard(Wizard):
 
         self._component_data = {'model': active_model, 'active_id': active_id,
                                 'obj_data': None, 'selected_component': None}
+        ModelAccess = Pool().get('ir.model.access')
+        self._component_model_access = ModelAccess.get_access(
+            self._component_model_map.keys())
         real_component = None
         if active_model != 'gnuhealth.encounter':  # open button was clicked
             real_component = EncounterComponent.union_unshard(active_id)
-            try:
-                sc = self._component_model_map[real_component.__name__]
-            except IndexError:
-                raise UnknownEncounterComponentType(real_component.__name__)
-                sc = None
-            self._component_data['selected_component'] = sc
-            self._component_data['obj'] = real_component
+            vis = self._component_model_access[real_component.__name__]['read']
+            if vis:  # permission granted to view this model
+                try:
+                    sc = self._component_model_map[real_component.__name__]
+                except IndexError:
+                    raise UnknownEncounterComponentType(real_component.__name__)
+                    sc = None
+                self._component_data['selected_component'] = sc
+                self._component_data['obj'] = real_component
+            else:
+                # no permission to view this component, we'll just close
+                self._component_data['selected_component'] = 'end'
+                self.raise_user_error('No read access to selected component')
         elif getattr(self.selector, 'component_type', False):
             # maybe we came here via the add component and now we're saving huh
             self._component_data[
