@@ -99,9 +99,12 @@ class BaseComponent(ModelSQL, ModelView):
     def get_byline(cls, instances, name):
         def mk_byline(obj):
             dt = obj.start_time.strftime('%Y-%m-%d %H:%M')
-            nom = obj.performed_by.name.name
+            if obj.performed_by:
+                nom = obj.performed_by.name.name
+            else:
+                nom = "-Unspecified-"
             if obj.signed_by and obj.signed_by != obj.performed_by:
-                nom = u'%s (%s)' % (nom, obj.signed_by.name.name)
+                nom = u'%s (signed by %s)' % (nom, obj.signed_by.name.name)
             return u'on %s by %s' % (dt, nom)
         return dict([(i.id, mk_byline(i)) for i in instances])
 
