@@ -1,14 +1,14 @@
 from trytond.pool import Pool
-from .encounter import PatientEncounter
 from .encounter_component_type import EncounterComponentType
+from .encounter import PatientEncounter
 from .components import *
 from .appointment import CreateAppointmentEncounter
 
 
 def register():
     Pool.register(
-        PatientEncounter,
         EncounterComponentType,
+        PatientEncounter,
         EncounterAnthro,
         EncounterAmbulatory,
         EncounterClinical,

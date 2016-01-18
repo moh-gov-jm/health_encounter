@@ -1,5 +1,5 @@
 
-from .base import (EncounterComponent, EncounterComponentType,
+from .base import (EncounterComponent,
                    BaseComponent, SIGNED_STATES)
 from .wizard import ChooseComponentTypeView, EditComponentWizard
 from .nursing import EncounterAnthro, EncounterAmbulatory
@@ -14,5 +14,5 @@ __all__ = [
     'EncounterClinical', 'EncounterProcedures', 'SecondaryCondition',
     'DiagnosticHypothesis', 'SignsAndSymptoms', 'EncounterMentalStatus',
     'Directions', 'EncounterComponent', 'ChooseComponentTypeView',
-    'EditComponentWizard', 'EncounterComponentType', 'BaseComponent'
+    'EditComponentWizard', 'BaseComponent'
 ]

@@ -1,5 +1,7 @@
 
 from trytond.model import ModelView, ModelSQL, fields
+from trytond import backend
+from trytond.transaction import Transaction
 import psycopg2
 
 __all__ = ['EncounterComponentType', 'UnknownEncounterComponentType']
@@ -59,13 +61,16 @@ class EncounterComponentType(ModelSQL, ModelView):
             return cls._component_type_list
         except AttributeError:
             pass
-        try:
-            ectypes = cls.search_read(
-                [('active', '=', True)],
-                fields_names=['id', 'name', 'code', 'model'],
-                order=[('ordering', 'ASC'), ('name', 'ASC')])
-        except psycopg2.ProgrammingError:
-            ectypes = []
+        cursor = Transaction().cursor
+        TableHandler = backend.get('TableHandler')
+        if not TableHandler.table_exist(cursor,
+                                        'gnuhealth_encounter_component_type'):
+            return []
+        ectypes = cls.search_read(
+            [('active', '=', True)],
+            fields_names=['id', 'name', 'code', 'model'],
+            order=[('ordering', 'ASC'), ('name', 'ASC')])
+
         cls._component_type_list = [(x['id'], x['name'], x['code'], x['model'])
                                     for x in ectypes]
         return cls._component_type_list
