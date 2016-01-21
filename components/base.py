@@ -122,7 +122,7 @@ class EncounterComponent(UnionMixin, BaseComponent):
     __name__ = 'gnuhealth.encounter.component'
     component_type = fields.Function(fields.Char('Type'),
                                      'get_component_type_name')
-    start_time_time = fields.Function(fields.Time('Start'),
+    start_time_time = fields.Function(fields.Time('Start', format='%H:%M'),
                                       'get_start_time_time')
 
     @classmethod

@@ -106,6 +106,9 @@ class PatientEncounter(ModelSQL, ModelView):
         Appointment.write(appts, {'state': 'processing'})
         return retval
 
+    #TODO: Validation:
+    #   1. that the end-date is not before the start date
+
     @classmethod
     @ModelView.button
     def sign_finish(cls, encounters):
