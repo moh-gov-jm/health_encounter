@@ -45,6 +45,10 @@ class BaseComponent(ModelSQL, ModelView):
         cls._order = [('start_time', 'ASC')]
         cls._order_name = 'start_time'
         cls.critical_info.depends = cls.get_critical_info_fields()
+        cls._error_messages = {
+            'bad_start_time': 'Component cannot start before the encounter',
+            'bad_end_time': 'End time cannot be before start time'
+        }
 
     @staticmethod
     def default_performed_by():
@@ -113,6 +117,15 @@ class BaseComponent(ModelSQL, ModelView):
     def mark_done(cls, components):
         pass
         # save the component and set the state to done
+
+    @classmethod
+    def validate(cls, records):
+        for rec in records:
+            # start time can't be before encounter start time
+            if rec.start_time < rec.encounter.start_time:
+                cls.raise_user_error('bad_start_time')
+            if rec.end_time and rec.end_time < rec.start_time:
+                cls.raise_user_error('bad_end_time')
 
 
 class EncounterComponent(UnionMixin, BaseComponent):
