@@ -48,14 +48,14 @@ class EncounterAnthro(BaseComponent):
         if self.height and self.weight:
             if (self.height > 0):
                 return self.weight / ((self.height / 100) ** 2)
-            return 0
+        return 0
 
     # Calculate WH ratio
     @fields.depends('abdominal_circ', 'hip', 'whr')
     def on_change_with_whr(self):
         waist = self.abdominal_circ
         hip = self.hip
-        if (hip > 0):
+        if (waist and hip > 0):
             whr = waist / hip
         else:
             whr = 0
