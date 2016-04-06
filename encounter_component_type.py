@@ -2,6 +2,7 @@
 from trytond.model import ModelView, ModelSQL, fields
 from trytond import backend
 from trytond.transaction import Transaction
+from collections import namedtuple
 import psycopg2
 
 __all__ = ['EncounterComponentType', 'UnknownEncounterComponentType']
@@ -9,6 +10,10 @@ __all__ = ['EncounterComponentType', 'UnknownEncounterComponentType']
 
 class UnknownEncounterComponentType(Exception):
     pass
+
+
+ComponentTypeInfo = namedtuple('ComponentTypeInfo',
+                               ['id', 'name', 'code', 'model'])
 
 
 class EncounterComponentType(ModelSQL, ModelView):
@@ -70,8 +75,8 @@ class EncounterComponentType(ModelSQL, ModelView):
             [('active', '=', True)],
             fields_names=['id', 'name', 'code', 'model'],
             order=[('ordering', 'ASC'), ('name', 'ASC')])
-
-        cls._component_type_list = [(x['id'], x['name'], x['code'], x['model'])
+        cls._component_type_list = [ComponentTypeInfo(x['id'], x['name'],
+                                                      x['code'], x['model'])
                                     for x in ectypes]
         return cls._component_type_list
 
