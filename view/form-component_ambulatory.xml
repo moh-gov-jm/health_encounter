@@ -19,27 +19,47 @@
             <field name="osat"/>
         </group>
         <newline/>
-        <group colspan="12" string="Nutrition" id="group_patient_evaluation_nutrition" col="6">
-            <label name="malnutrition"/>
-            <field name="malnutrition"/>
-            <label name="dehydration"/>
-            <field name="dehydration"/>
-            <label id="dehy_spacer" string=" " xalign="1.0" xexpand="1" colspan="2" />
+        <group id="group_midrow" col="12" colspan="12">
+            <group colspan="3" col="6" id="group_glucose_pregnant">
+                <label name="lmp" />
+                <field name="lmp" />
+                <label name="pregnant"/>
+                <field name="pregnant"/>
+            </group><newline />
+            <group colspan="6" string="Nutrition and Blood Sugar" id="group_patient_evaluation_nutrition" col="6">
+                <label name="malnutrition"/>
+                <field name="malnutrition"/>
+                <label name="dehydration"/>
+                <field name="dehydration"/>
+                <label name="glucose"/>
+                <field name="glucose"/>
+            </group>
         </group>
         <newline/>
-        <group colspan="12" col="6" string="Glucose and Lipids Profile" id="group_patient_evaluation_glucose_lipid">
-            <label name="glycemia"/>
-            <field name="glycemia"/>
-            <label name="hba1c"/>
-            <field name="hba1c"/>
-            <label name="cholesterol_total"/>
-            <field name="cholesterol_total"/>
-            <label name="hdl"/>
-            <field name="hdl"/>
-            <label name="ldl"/>
-            <field name="ldl"/>
-            <label name="tag"/>
-            <field name="tag"/>
+        <group colspan="12" col="6" string="Urinalysis " id="group_nursing_urinalysis">
+            <label name="uri_blood"/>
+            <field name="uri_blood" width="80" />
+            <label name="uri_nitrite"/>
+            <field name="uri_nitrite"/>
+            <label name="uri_protein"/>
+            <field name="uri_protein" width="80" />
+
+            <label name="uri_glucose"/>
+            <field name="uri_glucose"/>
+            <label name="uri_ketone"/>
+            <field name="uri_ketone"/>
+            <label name="uri_bilirubin"/>
+            <field name="uri_bilirubin" width="80" />
+            <group id="last_row" col="8" colspan="6">
+                <label name="uri_leuko"/>
+                <field name="uri_leuko"/>
+                <label name="uri_urobili" />
+                <field name="uri_urobili" />
+                <label name="uri_ph"/>
+                <field name="uri_ph"/>
+                <label name="uri_specific_gravity"/>
+                <field name="uri_specific_gravity"/>
+            </group>
         </group>
         <newline />
     </xpath>

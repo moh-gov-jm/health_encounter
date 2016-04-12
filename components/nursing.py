@@ -10,6 +10,12 @@ METRIC_CONV = {
 }
 
 
+URI_COMBOS = {
+    'default': ('normal', 'trace', '+', '++', '+++', '++++'),
+    'nitrite': ('normal', 'trace', 'small', 'moderate', 'large', 'large+')
+}
+
+
 class EncounterAnthro(BaseComponent):
     'Anthropometry'
     __name__ = 'gnuhealth.encounter.anthropometry'
@@ -133,46 +139,44 @@ class EncounterAmbulatory(BaseComponent):
     # Vital Signs
     systolic = fields.Integer('Systolic Pressure', states=SIGNED_STATES)
     diastolic = fields.Integer('Diastolic Pressure', states=SIGNED_STATES)
-    bpm = fields.Integer('Heart Rate',
+    bpm = fields.Integer(
+        'Heart Rate',
         help='Heart rate expressed in beats per minute', states=SIGNED_STATES)
-    respiratory_rate = fields.Integer('Respiratory Rate',
+    respiratory_rate = fields.Integer(
+        'Respiratory Rate',
         help='Respiratory rate expressed in breaths per minute',
         states=SIGNED_STATES)
-    osat = fields.Integer('Oxygen Saturation',
+    osat = fields.Integer(
+        'Oxygen Saturation',
         help='Oxygen Saturation(arterial).', states=SIGNED_STATES)
-    temperature = fields.Float('Temperature', digits=(4,2),
+    temperature = fields.Float(
+        u'Temperature (°C)', digits=(4, 2),
         help='Temperature in degrees celsius', states=SIGNED_STATES)
-    glycemia = fields.Float(
-        'Glycemia',
-        digits=(5,2),
-        help='Last blood glucose level. Can be an approximate value.',
-        states=SIGNED_STATES)
-
-    hba1c = fields.Float(
-        'Glycated Hemoglobin',
-        digits=(5, 2),
-        help='Last Glycated Hb level. Can be an approximate value.',
-        states=SIGNED_STATES)
-
-    cholesterol_total = fields.Integer(
-        'Last Cholesterol',
-        help='Last cholesterol reading. Can be an approximate value',
-        states=SIGNED_STATES)
-
-    hdl = fields.Integer(
-        'Last HDL',
-        help='Last HDL Cholesterol reading. Can be an approximate value',
-        states=SIGNED_STATES)
-
-    ldl = fields.Integer(
-        'Last LDL',
-        help='Last LDL Cholesterol reading. Can be an approximate value',
-        states=SIGNED_STATES)
-
-    tag = fields.Integer(
-        'Last TAGs',
-        help='Triacylglycerol(triglicerides) level. Can be an approximate.',
-        states=SIGNED_STATES)
+    pregnant = fields.Boolean('Pregnant', states=SIGNED_STATES)
+    lmp = fields.Date('Last Menstrual Period',
+                      help='Date last menstrual period started')
+    glucose = fields.Float(
+        'Glucose (mmol/l)', digits=(5, 2),
+        help='mmol/l. Reading from glucose meter', states=SIGNED_STATES)
+    uri_ph = fields.Numeric('pH', digits=(1, 1), states=SIGNED_STATES)
+    uri_specific_gravity = fields.Numeric('Specific Gravity',
+                                          digits=(1, 3), states=SIGNED_STATES)
+    uri_protein = fields.Selection(
+        'uri_selection', 'Protein', states=SIGNED_STATES)
+    uri_blood = fields.Selection(
+        'uri_selection', 'Blood', states=SIGNED_STATES)
+    uri_glucose = fields.Selection(
+        'uri_selection', 'Glucose', states=SIGNED_STATES)
+    uri_nitrite = fields.Selection(
+        'uri_selection', 'Nitrite', states=SIGNED_STATES)
+    uri_bilirubin = fields.Selection(
+        'uri_selection', 'Bilirubin', states=SIGNED_STATES)
+    uri_leuko = fields.Selection(
+        'uri_selection', 'Leukocytes', states=SIGNED_STATES)
+    uri_ketone = fields.Selection(
+        'uri_selection', 'Ketone', states=SIGNED_STATES)
+    uri_urobili = fields.Selection(
+        'uri_selection', 'Urobilinogen', states=SIGNED_STATES)
 
     malnutrition = fields.Boolean(
         'Malnourished',
@@ -189,10 +193,6 @@ class EncounterAmbulatory(BaseComponent):
         help='If the patient show signs of dehydration.',
         states=SIGNED_STATES)
 
-    # @classmethod
-    # def __setup__(cls):
-    #     super(EncounterAmbulatory, cls).__setup__()
-    #     cls.temperature.string = "Temperature (°C)"
     @classmethod
     def get_critical_info_fields(cls):
         '''
@@ -212,11 +212,11 @@ class EncounterAmbulatory(BaseComponent):
         if self.systolic and self.diastolic:
             line.append(u'bp %3.0f/%3.0f' % (self.systolic, self.diastolic))
         if self.bpm:
-            line.append(u'heart %dbpm' % self.bpm)
+            line.append(u'P %dbpm' % self.bpm)
         if self.respiratory_rate:
-            line.append(u'breath %d' % self.respiratory_rate)
+            line.append(u'R %d' % self.respiratory_rate)
         if self.osat:
-            line.append(u'ox %d' % self.osat)
+            line.append(u'O2 %d' % self.osat)
         return u", ".join(line)
 
     def get_report_info(self, name):
@@ -237,20 +237,12 @@ class EncounterAmbulatory(BaseComponent):
         if self.osat:
             lines.append((u'* Oxygen Saturation: %d' % self.osat, ))
 
-        # ToDo: Put in the Glucose and Lipids fields
-        if self.glycemia:
-            lines.append((u'* Glycemia:', '%4.2f' % self.glycemia))
-        if self.hba1c:
-            lines.append((u'* Glycated Hemoglobin:', '%4.2f' % self.hba1c))
-        if self.cholesterol_total:
-            lines.append((u'* Last Cholesterol:', '%d' % self.cholesterol_total))
-        if self.hdl:
-            lines.append((u'* Last HDL:', '%d' % self.hdl))
-        if self.ldl:
-            lines.append((u'* Last LDL:', '%d' % self.ldl))
-        if self.tag:
-            lines.append((u'* Last TAGs:', '%d' % self.tag))
+        # ToDo: Put in the urine dipstick fields
 
         if self.notes:
             lines.extend([[u'\n=== Notes ==='], [unicode(self.notes)]])
         return u'\n'.join([u' '.join(x) for x in lines])
+
+    @staticmethod
+    def uri_selection():
+        return [(x, x) for x in URI_COMBOS['default']]
