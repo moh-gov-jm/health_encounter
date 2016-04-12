@@ -23,7 +23,7 @@ class EncounterClinical(BaseComponent):
     __name__ = 'gnuhealth.encounter.clinical'
 
     diagnosis = fields.Many2One(
-        'gnuhealth.pathology', 'Presumptive Diagnosis',
+        'gnuhealth.pathology', 'Main Condition',
         help='Presumptive Diagnosis. If no diagnosis can be made'
         ', encode the main sign or symptom.',
         states=STATES)
@@ -43,7 +43,7 @@ class EncounterClinical(BaseComponent):
     signs_symptoms = fields.One2Many(
         'gnuhealth.signs_and_symptoms',
         'clinical_component', 'Signs and Symptoms',
-        help='Enter the Signs and Symptoms for the patient in this evaluation.',
+        help='Signs and Symptoms for the patient in this encounter.',
         states=STATES)
     treatment_plan = fields.Text('Treatment Plan', states=STATES)
 
