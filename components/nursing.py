@@ -10,9 +10,19 @@ METRIC_CONV = {
 }
 
 
-URI_COMBOS = {
-    'default': ('normal', 'trace', '+', '++', '+++', '++++'),
-    'nitrite': ('normal', 'trace', 'small', 'moderate', 'large', 'large+')
+URINALYSIS = {
+    'default': [
+        ('neg', 'negative'),
+        ('trace', 'trace'),
+        ('+', '+'), ('++', '++'),
+        ('+++', '+++'), ('++++', '++++')],
+    'nitrite': [
+        ('neg.', 'negative'),
+        ('trace', 'trace'),
+        ('small', 'small'),
+        ('moderate', 'moderate'),
+        ('large', 'large'),
+        ('large+', 'large+')]
 }
 
 
@@ -162,21 +172,21 @@ class EncounterAmbulatory(BaseComponent):
     uri_specific_gravity = fields.Numeric('Specific Gravity',
                                           digits=(1, 3), states=SIGNED_STATES)
     uri_protein = fields.Selection(
-        'uri_selection', 'Protein', states=SIGNED_STATES)
+        'uri_selection', 'Protein', sort=False, states=SIGNED_STATES)
     uri_blood = fields.Selection(
-        'uri_selection', 'Blood', states=SIGNED_STATES)
+        'uri_selection', 'Blood', sort=False, states=SIGNED_STATES)
     uri_glucose = fields.Selection(
-        'uri_selection', 'Glucose', states=SIGNED_STATES)
+        'uri_selection', 'Glucose', sort=False, states=SIGNED_STATES)
     uri_nitrite = fields.Selection(
-        'uri_selection', 'Nitrite', states=SIGNED_STATES)
+        'uri_nitrite_selection', 'Nitrite', sort=False, states=SIGNED_STATES)
     uri_bilirubin = fields.Selection(
-        'uri_selection', 'Bilirubin', states=SIGNED_STATES)
+        'uri_selection', 'Bilirubin', sort=False, states=SIGNED_STATES)
     uri_leuko = fields.Selection(
-        'uri_selection', 'Leukocytes', states=SIGNED_STATES)
+        'uri_selection', 'Leukocytes', sort=False, states=SIGNED_STATES)
     uri_ketone = fields.Selection(
-        'uri_selection', 'Ketone', states=SIGNED_STATES)
+        'uri_selection', 'Ketone', sort=False, states=SIGNED_STATES)
     uri_urobili = fields.Selection(
-        'uri_selection', 'Urobilinogen', states=SIGNED_STATES)
+        'uri_selection', 'Urobilinogen', sort=False, states=SIGNED_STATES)
 
     malnutrition = fields.Boolean(
         'Malnourished',
@@ -238,11 +248,33 @@ class EncounterAmbulatory(BaseComponent):
             lines.append((u'* Oxygen Saturation: %d' % self.osat, ))
 
         # ToDo: Put in the urine dipstick fields
+        dipstick = []
+        for fld in ['uri_blood', 'uri_nitrite', 'uri_protein', 'uri_glucose',
+                    'uri_ketone', 'uri_leuko', 'uri_bilirubin',
+                    'uri_urobili', 'uri_ph', 'uri_specific_gravity']:
+            val = getattr(self, fld)
+            vname = self._fields[fld].string
+            if val:
+                dipstick.append((vname, str(val)))
+        if dipstick:
+            lines.append((u'* Urinalysis:', ))
+            line = []
+            for i, dsval in enumerate(dipstick):
+                if i % 5 == 0:
+                    if line:
+                        lines.append(('   ', ', '.join(line)))
+                    line = []
+                line.append(': '.join(dsval))
+            lines.append(('   ', ', '.join(line)))
 
         if self.notes:
-            lines.extend([[u'\n=== Notes ==='], [unicode(self.notes)]])
+            lines.extend([(u'\n=== Notes ===', ), (unicode(self.notes), )])
         return u'\n'.join([u' '.join(x) for x in lines])
 
     @staticmethod
     def uri_selection():
-        return [(x, x) for x in URI_COMBOS['default']]
+        return [(None, '')] + URINALYSIS['default']
+
+    @staticmethod
+    def uri_nitrite_selection():
+        return [(None, '')] + URINALYSIS['nitrite']

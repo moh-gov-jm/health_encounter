@@ -38,21 +38,21 @@
         <newline/>
         <group colspan="12" col="6" string="Urinalysis " id="group_nursing_urinalysis">
             <label name="uri_blood"/>
-            <field name="uri_blood" width="80" />
+            <field name="uri_blood" />
             <label name="uri_nitrite"/>
             <field name="uri_nitrite"/>
             <label name="uri_protein"/>
-            <field name="uri_protein" width="80" />
+            <field name="uri_protein" />
 
             <label name="uri_glucose"/>
             <field name="uri_glucose"/>
             <label name="uri_ketone"/>
             <field name="uri_ketone"/>
-            <label name="uri_bilirubin"/>
-            <field name="uri_bilirubin" width="80" />
+            <label name="uri_leuko"/>
+            <field name="uri_leuko"/>
             <group id="last_row" col="8" colspan="6">
-                <label name="uri_leuko"/>
-                <field name="uri_leuko"/>
+                <label name="uri_bilirubin"/>
+                <field name="uri_bilirubin" />
                 <label name="uri_urobili" />
                 <field name="uri_urobili" />
                 <label name="uri_ph"/>
