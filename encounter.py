@@ -69,8 +69,8 @@ class PatientEncounter(ModelSQL, ModelView):
         cls._error_messages.update({
             'health_professional_warning': 'No health professional '
             'associated with this user',
-            'end_date_before_start': 'End time "%(end_time)s" BEFORE'
-            ' start time "%(start_time)s"',
+            'end_date_before_start': 'End time cannot be before'
+            ' Start time\n"%(start_time)s"',
             'end_date_required': 'End time is required for finishing',
             'unsigned_components': 'There are unsigned components.'
                                    # 'This encounter cannot be signed'
@@ -106,8 +106,17 @@ class PatientEncounter(ModelSQL, ModelView):
         Appointment.write(appts, {'state': 'processing'})
         return retval
 
-    #TODO: Validation:
-    #   1. that the end-date is not before the start date
+    @classmethod
+    def validate(cls, records):
+        for e in records:
+            # 1. that the end-date is not before the start date
+            if e.end_time <= e.start_time:
+                cls.raise_user_error('end_date_before_start',{
+                                     'start_time': e.start_time.strftime('%c'),
+                                     'end_time': e.end_time.strftime('%c')})
+            # 2. That the encounter didn't start before the appointment
+            # should we really though?
+        return super(PatientEncounter, cls).validate(records)
 
     @classmethod
     @ModelView.button
