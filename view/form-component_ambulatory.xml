@@ -25,6 +25,7 @@
                 <field name="lmp" />
                 <label name="pregnant"/>
                 <field name="pregnant"/>
+                <field name="childbearing_age" invisible="1" />
             </group><newline />
             <group colspan="6" string="Nutrition and Blood Sugar" id="group_patient_evaluation_nutrition" col="6">
                 <label name="malnutrition"/>

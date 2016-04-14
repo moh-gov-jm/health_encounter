@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from trytond.model import fields
+from trytond.pyson import Eval, Equal, And, Or, Not, Bool
 from .base import BaseComponent, SIGNED_STATES
 
 
@@ -24,6 +25,15 @@ URINALYSIS = {
         ('large', 'large'),
         ('large+', 'large+')]
 }
+
+PYSON_MALE = Equal(Eval('encounter.patient.sex', ''), 'm'),
+PYSON_FEMALE = Equal(Eval('encounter.patient.sex', ''), 'f'),
+PYSON_MENARCH = Eval('encounter.patient.childbearing_age', False)
+STATE_NO_MENSES = {'readonly': Not(Eval('childbearing_age', True)),
+                   'invisible': Not(Eval('childbearing_age', True))}
+for key in STATE_NO_MENSES:
+    if key in SIGNED_STATES:
+        STATE_NO_MENSES[key] = Or(STATE_NO_MENSES[key], SIGNED_STATES[key])
 
 
 class EncounterAnthro(BaseComponent):
@@ -162,8 +172,10 @@ class EncounterAmbulatory(BaseComponent):
     temperature = fields.Float(
         u'Temperature (°C)', digits=(4, 2),
         help='Temperature in degrees celsius', states=SIGNED_STATES)
-    pregnant = fields.Boolean('Pregnant', states=SIGNED_STATES)
-    lmp = fields.Date('Last Menstrual Period',
+    childbearing_age = fields.Function(fields.Boolean('Childbearing Age'),
+                                       'get_childbearing_age')
+    pregnant = fields.Boolean('Pregnant', states=STATE_NO_MENSES)
+    lmp = fields.Date('Last Menstrual Period', states=STATE_NO_MENSES,
                       help='Date last menstrual period started')
     glucose = fields.Float(
         'Glucose (mmol/l)', digits=(5, 2),
@@ -227,6 +239,10 @@ class EncounterAmbulatory(BaseComponent):
             line.append(u'R %d' % self.respiratory_rate)
         if self.osat:
             line.append(u'O2 %d' % self.osat)
+        if self.pregnant:
+            line.append(u'Preg.')
+        if self.lmp:
+            line.append(u'LMP %s' % self.lmp.strftime('%d-%b'))
         return u", ".join(line)
 
     def get_report_info(self, name):
@@ -247,7 +263,14 @@ class EncounterAmbulatory(BaseComponent):
         if self.osat:
             lines.append((u'* Oxygen Saturation: %d' % self.osat, ))
 
-        # ToDo: Put in the urine dipstick fields
+        if self.lmp:
+            lines.append(('* Last Menstrual Period:',
+                          self.lmp.strftime('%b %d %y')))
+        if self.pregnant:
+            lines.append(('* Pregnant', ))
+        if self.glucose:
+            lines.append(('Glucose:', str(self.glucose), 'mmol/l'))
+
         dipstick = []
         for fld in ['uri_blood', 'uri_nitrite', 'uri_protein', 'uri_glucose',
                     'uri_ketone', 'uri_leuko', 'uri_bilirubin',
@@ -270,6 +293,12 @@ class EncounterAmbulatory(BaseComponent):
         if self.notes:
             lines.extend([(u'\n=== Notes ===', ), (unicode(self.notes), )])
         return u'\n'.join([u' '.join(x) for x in lines])
+
+    def get_childbearing_age(self, name):
+        print("calling for childbearing_age encounter=[%s]" % self.encounter.rec_name)
+        if self.encounter and self.encounter.patient:
+            return getattr(self.encounter.patient, name)
+        return True
 
     @staticmethod
     def uri_selection():
