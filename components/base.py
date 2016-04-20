@@ -36,7 +36,7 @@ class BaseComponent(ModelSQL, ModelView):
     is_union_comp = fields.Function(fields.Boolean('Unified component'),
                                     'get_is_union')
     byline = fields.Function(fields.Char('Byline',
-                             help='date started, clinician and signer'),
+                             help='date started, clinician and signed by'),
                              'get_byline')
 
     @classmethod

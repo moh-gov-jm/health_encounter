@@ -40,9 +40,9 @@ class EncounterAnthro(BaseComponent):
     'Anthropometry'
     __name__ = 'gnuhealth.encounter.anthropometry'
 
-    weight = fields.Float('Weight', help='Weight in Kilos',
+    weight = fields.Float('Weight (kg)', help='Weight in Kilos',
                           states=SIGNED_STATES)
-    height = fields.Float('Height', help='Height in centimeters, eg 175',
+    height = fields.Float('Height (cm)', help='Height in centimeters, eg 175',
                           states=SIGNED_STATES)
 
     bmi = fields.Float(
@@ -51,12 +51,12 @@ class EncounterAnthro(BaseComponent):
         states=SIGNED_STATES)
 
     head_circumference = fields.Float(
-        'Head Circumference',
+        'Head Circumference (cm)',
         help='Head circumference',
         states=SIGNED_STATES)
 
-    abdominal_circ = fields.Float('Waist', states=SIGNED_STATES)
-    hip = fields.Float('Hip', help='Hip circumference in centimeters, eg 100',
+    abdominal_circ = fields.Float('Waist (cm)', states=SIGNED_STATES)
+    hip = fields.Float('Hip (cm)', help='Hip circumference in centimeters, eg 100',
                        states=SIGNED_STATES)
 
     whr = fields.Float(
@@ -64,7 +64,7 @@ class EncounterAnthro(BaseComponent):
         states=SIGNED_STATES)
 
     head_circumference = fields.Float(
-        'Head Circumference',
+        'Head Circumference (cm)',
         help='Head circumference',
         states=SIGNED_STATES)
 
@@ -295,7 +295,6 @@ class EncounterAmbulatory(BaseComponent):
         return u'\n'.join([u' '.join(x) for x in lines])
 
     def get_childbearing_age(self, name):
-        print("calling for childbearing_age encounter=[%s]" % self.encounter.rec_name)
         if self.encounter and self.encounter.patient:
             return getattr(self.encounter.patient, name)
         return True
