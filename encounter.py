@@ -110,8 +110,8 @@ class PatientEncounter(ModelSQL, ModelView):
     def validate(cls, records):
         for e in records:
             # 1. that the end-date is not before the start date
-            if e.end_time <= e.start_time:
-                cls.raise_user_error('end_date_before_start',{
+            if e.end_time and e.end_time <= e.start_time:
+                cls.raise_user_error('end_date_before_start', {
                                      'start_time': e.start_time.strftime('%c'),
                                      'end_time': e.end_time.strftime('%c')})
             # 2. That the encounter didn't start before the appointment
