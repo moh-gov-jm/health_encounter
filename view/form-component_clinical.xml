@@ -12,7 +12,7 @@
 
     <xpath expr="//field[@name=&quot;notes&quot;]" position="after">
         <newline />
-        <group id="clinic_diag_diag" colspan="12" string="Presumptive Diagnosis" col="6">
+        <group id="clinic_diag_diag" colspan="12" string="Main Condition" col="6">
             <field name="diagnosis" colspan="6" xexpand="1" />
         </group>
         <newline />
