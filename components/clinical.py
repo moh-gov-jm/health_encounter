@@ -24,7 +24,7 @@ class EncounterClinical(BaseComponent):
 
     diagnosis = fields.Many2One(
         'gnuhealth.pathology', 'Main Condition',
-        help='Presumptive Diagnosis. If no diagnosis can be made'
+        help='Primary Diagnosis. If no diagnosis can be made'
         ', encode the main sign or symptom.',
         states=STATES)
 
@@ -81,7 +81,7 @@ class EncounterClinical(BaseComponent):
                           (u'\n'.join(filter(None, self.notes.split('\n'))), ),
                           DASHER])
         if self.diagnosis:
-            lines.append((u'Presumptive Diagnosis:', self.diagnosis.rec_name))
+            lines.append((u'Main Condition:', self.diagnosis.rec_name))
         if self.secondary_conditions:
             lines.extend(
                 flip_one2many(u'Secondary Conditions found on the patient',
