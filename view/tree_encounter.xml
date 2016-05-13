@@ -3,8 +3,9 @@
     <field name="upi" />
     <field name="patient" expand="1" />
     <field name="start_time" />
-    <field name="primary_complaint" />
+    <field name="primary_complaint" expand="1" />
     <field name="institution" />
     <field name="state" />
     <field name="signed_by" />
+    <field name="clinicians" tree_invisible="1" />
 </tree>

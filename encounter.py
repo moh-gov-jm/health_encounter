@@ -62,6 +62,10 @@ class PatientEncounter(ModelSQL, ModelView):
     age = fields.Function(fields.Char('Age'), 'get_person_patient_field')
     crypto_enabled = fields.Function(fields.Boolean('Crypto Enabled'),
                                      'get_crypto_enabled')
+    clinicians = fields.Function(
+        fields.One2Many('gnuhealth.healthprofessional', 'encounter',
+                        'Clinicians'), 'get_clinicians',
+        searcher='search_clinicians')
 
     @classmethod
     def __setup__(cls):
@@ -255,3 +259,22 @@ class PatientEncounter(ModelSQL, ModelView):
             return [real_comps[i] for i in typedict.get(name, [])]
         else:
             return real_comps
+
+    def get_clinicians(self, name):
+        '''returns a list of IDs for the clinicians that performed
+        components linked here'''
+        health_profs = [x.performed_by for x in self.components]
+        health_profs.extend([x.signed_by for x in self.components
+                             if x.sign_time])
+        return map(int, set(health_profs))
+
+    @classmethod
+    def search_clinicians(self, name, clause):
+        fld, operator, operand = clause
+        component_model = Pool().get('gnuhealth.encounter.component')
+        components = component_model.search([
+            'OR', ('performed_by', operator, operand),
+            ('signed_by', operator, operand)])
+        encounter_list = [x.encounter.id
+                          for x in component_model.browse(components)]
+        return [('id', 'in', encounter_list)]
