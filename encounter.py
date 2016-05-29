@@ -2,6 +2,7 @@
 import re
 from datetime import datetime
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pyson import Eval, Not, Equal, Or, Greater, In, Len
 from trytond.modules.health import HealthInstitution, HealthProfessional
@@ -59,7 +60,8 @@ class PatientEncounter(ModelSQL, ModelView):
         fields.Char('Medical Record Number'), 'get_upi_mrn')
     sex_display = fields.Function(fields.Char('Sex'),
                                   'get_person_patient_field')
-    age = fields.Function(fields.Char('Age'), 'get_person_patient_field')
+    age = fields.Function(fields.Char('Age', help="Age at start of encounter"),
+                          'get_patient_age')
     crypto_enabled = fields.Function(fields.Boolean('Crypto Enabled'),
                                      'get_crypto_enabled')
     clinicians = fields.Function(
@@ -278,3 +280,26 @@ class PatientEncounter(ModelSQL, ModelView):
         encounter_list = [x.encounter.id
                           for x in component_model.browse(components)]
         return [('id', 'in', encounter_list)]
+
+    @classmethod
+    def get_patient_age(cls, instances, name):
+        '''
+        Uses the AGE function in the database to calculate the age at
+        the date at which the encounter started
+        '''
+        c = Transaction().cursor
+        tbl = cls.__table__()
+        qry = "\n".join(
+            ["SET intervalstyle TO 'iso_8601';",
+             "SELECT a.id as id, btrim(lower("
+             "regexp_replace(AGE(a.start_time::date, c.dob)::varchar, "
+             "'([YMD])', '\\1 ', 'g')), 'p ')  as showage ",
+             "from " + str(tbl) + " as a ",
+             " inner join gnuhealth_patient as b on a.patient=b.id",
+             " inner join party_party c on b.name=c.id"
+             " where a.id in %s ;"])
+        qry_parm = tuple(map(int, instances))
+        c.execute(qry, (qry_parm, ))
+        outx = c.fetchall()
+        outd = dict([x for x in outx])
+        return outd
