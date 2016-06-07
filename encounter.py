@@ -268,7 +268,7 @@ class PatientEncounter(ModelSQL, ModelView):
         health_profs = [x.performed_by for x in self.components]
         health_profs.extend([x.signed_by for x in self.components
                              if x.sign_time])
-        return map(int, set(health_profs))
+        return map(int, set(filter(None, health_profs)))
 
     @classmethod
     def search_clinicians(self, name, clause):
