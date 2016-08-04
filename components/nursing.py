@@ -3,6 +3,7 @@
 from trytond.model import fields
 from trytond.pyson import Eval, Equal, And, Or, Not, Bool
 from .base import BaseComponent, SIGNED_STATES
+from ..utils import get_model_field_perm
 
 
 METRIC_CONV = {

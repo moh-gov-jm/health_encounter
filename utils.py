@@ -40,3 +40,16 @@ def localtime(current):
     else:
         cdt = current
     return cdt.astimezone(tz)
+
+
+def get_model_field_perm(model_name, field_name, perm='write',
+                         default_deny=True):
+    '''Returns True if the current user has the :param perm: permission
+    on :param field_name: in :param model_name: model'''
+    # !! Must be run within a transaction or it nah go work
+    d = 0 if default_deny else 1
+    FieldAccess = Pool().get('ir.model.field.access')
+    user_access = FieldAccess.get_access([model_name])[model_name]
+    permdict = user_access.get(field_name, {perm: d})
+    user_has_perm = bool(permdict[perm])
+    return user_has_perm
