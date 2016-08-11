@@ -5,7 +5,6 @@ from trytond.pyson import Eval, Equal, And, Or, Not, Bool
 from .base import BaseComponent, SIGNED_STATES
 from ..utils import get_model_field_perm
 
-
 METRIC_CONV = {
     'length': (1 / 2.54),
     'weight': 2.20462262
@@ -217,6 +216,9 @@ class EncounterAmbulatory(BaseComponent):
         help='If the patient show signs of dehydration.',
         states=SIGNED_STATES)
 
+    can_do_details = fields.Function(fields.Boolean('Can do triage details'),
+                                     'get_do_details_perm')
+
     @classmethod
     def get_critical_info_fields(cls):
         '''
@@ -225,6 +227,13 @@ class EncounterAmbulatory(BaseComponent):
         '''
         return ['temperature', 'dehydration', 'systolic', 'diastolic',
                 'bpm', 'respiratory_rate', 'osat']
+
+    @classmethod
+    def get_do_details_perm(cls, instances, name):
+        user_has_perm = get_model_field_perm(cls.__name__, name, 'create',
+                                             default_deny=True)
+        outval = dict([(x.id, user_has_perm) for x in instances])
+        return outval
 
     def make_critical_info(self):
         line = []
@@ -308,3 +317,10 @@ class EncounterAmbulatory(BaseComponent):
     @staticmethod
     def uri_nitrite_selection():
         return [(None, '')] + URINALYSIS['nitrite']
+
+    @staticmethod
+    def default_can_do_details():
+        user_has_perm = get_model_field_perm('gnuhealth.encounter.ambulatory',
+                                             'can_do_details', 'create',
+                                             default_deny=True)
+        return user_has_perm
