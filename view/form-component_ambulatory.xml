@@ -4,7 +4,7 @@
         <form string="Nursing (Ambulatory)" />
     </xpath>
     <xpath expr="//label[@name=&quot;notes&quot;]" position="before">
-        <group colspan="12" col="6" string="Vital Signs" id="group_vital_signs">
+        <group colspan="12" col="6" string="Vital Signs" id="group_vital_signs" states="{'invisible': Not(Eval('can_do_details', False))}">
             <label name="temperature"/>
             <field name="temperature"/>
             <label name="systolic"/>
@@ -51,6 +51,7 @@
             <field name="uri_ketone"/>
             <label name="uri_leuko"/>
             <field name="uri_leuko"/>
+            <field name="can_do_details" invisible="1" />
             <group id="last_row" col="8" colspan="6">
                 <label name="uri_bilirubin"/>
                 <field name="uri_bilirubin" />
