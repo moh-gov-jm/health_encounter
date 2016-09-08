@@ -301,5 +301,6 @@ class PatientEncounter(ModelSQL, ModelView):
         qry_parm = tuple(map(int, instances))
         c.execute(qry, (qry_parm, ))
         outx = c.fetchall()
-        outd = dict([x for x in outx])
+        outd = dict([x if not isinstance(x[1], type(None)) else (x[0], '')
+                     for x in outx])
         return outd
