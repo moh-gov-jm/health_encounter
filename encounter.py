@@ -291,16 +291,13 @@ class PatientEncounter(ModelSQL, ModelView):
         tbl = cls.__table__()
         qry = "\n".join(
             ["SET intervalstyle TO 'iso_8601';",
-             "SELECT a.id as id, btrim(lower("
+             "SELECT a.id as id, COALESCE(btrim(lower("
              "regexp_replace(AGE(a.start_time::date, c.dob)::varchar, "
-             "'([YMD])', '\\1 ', 'g')), 'p ')  as showage ",
+             "'([YMD])', '\\1 ', 'g')), 'p '), '--')  as showage ",
              "from " + str(tbl) + " as a ",
              " inner join gnuhealth_patient as b on a.patient=b.id",
              " inner join party_party c on b.name=c.id"
              " where a.id in %s ;"])
         qry_parm = tuple(map(int, instances))
         c.execute(qry, (qry_parm, ))
-        outx = c.fetchall()
-        outd = dict([(x[0], '') if x[1] is None else x
-                     for x in outx])
-        return outd
+        return dict([x for x in c.fetchall()])
