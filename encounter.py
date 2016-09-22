@@ -40,7 +40,8 @@ class PatientEncounter(ModelSQL, ModelView):
         states=STATES)
     next_appointment = fields.Many2One(
         'gnuhealth.appointment', 'Next Appointment',
-        # domain=[('patient', '=', Eval('patient'))],
+        # domain=['OR', ('state', '=', 'free'),
+        #         ('patient', '=', Eval('patient'))],
         depends=['patient'],
         states=SIGNED_STATES)
     signed_by = fields.Many2One(
@@ -76,7 +77,7 @@ class PatientEncounter(ModelSQL, ModelView):
             'health_professional_warning': 'No health professional '
             'associated with this user',
             'end_date_before_start': 'End time cannot be before'
-            ' Start time\n"%(start_time)s"',
+            'Start time\n"%(start_time)s"',
             'end_date_required': 'End time is required for finishing',
             'unsigned_components': 'There are unsigned components.'
                                    # 'This encounter cannot be signed'
