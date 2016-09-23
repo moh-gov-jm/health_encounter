@@ -77,7 +77,7 @@ class PatientEncounter(ModelSQL, ModelView):
             'health_professional_warning': 'No health professional '
             'associated with this user',
             'end_date_before_start': 'End time cannot be before'
-            'Start time\n"%(start_time)s"',
+            ' Start time\n"%(start_time)s"',
             'end_date_required': 'End time is required for finishing',
             'unsigned_components': 'There are unsigned components.'
                                    # 'This encounter cannot be signed'

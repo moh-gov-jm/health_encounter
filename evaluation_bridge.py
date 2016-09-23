@@ -43,7 +43,8 @@ def make_encounter(ev):
     insti = ev.institution
     if not insti:
         insti = get_institution()
-
+    if end_time and end_time <= start_time:
+        end_time = start_time + DELAY
     encounter = {
         'patient': Id(ev.patient),
         'start_time': start_time,
@@ -115,14 +116,14 @@ def make_encounter(ev):
         else:  # we have to figure it out from the DDx and 2ndary
             ddx = ev.diagnostic_hypothesis
             if len(ddx) == 1:  # single DDx and no presumptive?
-                comp.update(diagnosis=Id(ddx[0].pathology),
-                            newly_diagnosed=ddx[0].first_diagnosis)
+                comp.update(diagnosis=Id(ddx[0].pathology))  # ,
+                            # newly_diagnosed=ddx[0].first_diagnosis)
             elif len(ddx) > 1:  # convert the rest to secondary conditions
                 comp.update(
                     secondary_conditions=[
                         ('create', [{'pathology': Id(x.pathology),
-                                     'comments':x.comments,
-                                     'newly_diagnosed': x.first_diagnosis}
+                                     'comments':x.comments}
+                                     # 'newly_diagnosed': x.first_diagnosis}
                                     for x in ddx]
                         )
                     ]
