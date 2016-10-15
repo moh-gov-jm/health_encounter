@@ -20,5 +20,20 @@
             <field name="model">gnuhealth.encounter,-1</field>
             <field name="action" ref="health_encounter_report_patient"/>
         </record>
+    <!-- Appointment Report -->
+        <record model="ir.action.report" id="health_appointment_report_patient">
+            <field name="name">Appointment Report</field>
+            <field name="report_name">gnuhealth.appointment.report</field>
+            <field name="model">gnuhealth.appointment</field>
+            <field name="active" eval="True" />
+            <field name="report">health_encounter/report/appointments_report.odt</field>
+            <field name="template_extension">odt</field>
+            <field name="extension"></field>
+        </record>
+        <record model="ir.action.keyword" id="jm_appointment_facesheet">
+            <field name="keyword">form_print</field>
+            <field name="model">gnuhealth.appointment,-1</field>
+            <field name="action" ref="health_appointment_report_patient"/>
+        </record>
     </data>
 </tryton>
