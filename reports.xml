@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+    Author: Randy Burrell
+    Date: 2016/10/11
+-->
+<tryton>
+    <data>
+    <!-- Encounter Report -->
+        <record model="ir.action.report" id="health_encounter_report_patient">
+            <field name="name">Encounter Report</field>
+            <field name="report_name">gnuhealth.encounter.report</field>
+            <field name="model">gnuhealth.encounter</field>
+            <field name="active" eval="True" />
+            <field name="report">health_encounter/report/health_encounter_facesheet.odt</field>
+            <field name="template_extension">odt</field>
+            <field name="extension"></field>
+        </record>
+        <record model="ir.action.keyword" id="jm_encounter_facesheet">
+            <field name="keyword">form_print</field>
+            <field name="model">gnuhealth.encounter,-1</field>
+            <field name="action" ref="health_encounter_report_patient"/>
+        </record>
+    <!-- Appointment Report -->
+        <record model="ir.action.report" id="health_appointment_report_patient">
+            <field name="name">Appointment Report</field>
+            <field name="report_name">gnuhealth.appointment.report</field>
+            <field name="model">gnuhealth.appointment</field>
+            <field name="active" eval="True" />
+            <field name="report">health_encounter/report/appointments_report.odt</field>
+            <field name="template_extension">odt</field>
+            <field name="extension"></field>
+        </record>
+        <record model="ir.action.keyword" id="jm_appointment_facesheet">
+            <field name="keyword">form_print</field>
+            <field name="model">gnuhealth.appointment,-1</field>
+            <field name="action" ref="health_appointment_report_patient"/>
+        </record>
+    </data>
+</tryton>
