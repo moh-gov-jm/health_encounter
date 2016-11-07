@@ -30,8 +30,6 @@ Imports::
 
     >>> from trytond.modules.health_jamaica.tryton_utils import random_bool, random_id
 
-    >>> from trytond.modules.health_encounter.components.mental_status import LOC, MOODS
-
 
 
 Create database::
@@ -48,20 +46,6 @@ Create database::
 
 
 
-Install health_disease_notification, health_disease_notification_history::
-
-
-
-    >>> Module = Model.get('ir.module.module')
-
-    >>> modules = Module.find([('name', 'in', ['health_encounter']), ])
-
-    >>> Module.install([x.id for x in modules], CONFIG.context)
-
-    >>> Wizard('ir.module.module.install_upgrade').execute('upgrade')
-
-
-
 Get Patient::
 
 
@@ -69,8 +53,6 @@ Get Patient::
     >>> Patient = Model.get('gnuhealth.patient')
 
     >>> HealthProfessional = Model.get('gnuhealth.healthprofessional')
-
-    >>> Notification = Model.get('gnuhealth.disease_notification')
 
     >>> Institution = Model.get('gnuhealth.institution')
 
@@ -96,7 +78,7 @@ Create Appointment::
 
     >>> Specialty = Model.get('gnuhealth.specialty')
 
-    >>> specialty, = Specialty.find([('id', '=', random_id(30))])
+    >>> specialty, = Specialty.find([('id', '=', random_id(40))])
 
     >>> appointment.speciality = specialty
 
@@ -107,9 +89,6 @@ Create Appointment::
     >>> appointment.is_today
     True
 
-    >>> appointment.tree_color
-    'black'
-
     >>> appointment_next = Appointment()
 
     >>> appointment_next.patient = patient
@@ -118,7 +97,7 @@ Create Appointment::
 
     >>> Specialty = Model.get('gnuhealth.specialty')
 
-    >>> specialty, = Specialty.find([('id', '=', random_id(30))])
+    >>> specialty, = Specialty.find([('code', '=', 'BIOCHEM')])
 
     >>> appointment_next.speciality = specialty
 
@@ -162,9 +141,6 @@ Create Encounter::
 
     >>> encounter.save()
 
-    >>> appointment.tree_color
-    'green'
-
     >>> encounter.primary_complaint = 'Fever, Headache, Muscle-ache'
 
     >>> Institution = Model.get('gnuhealth.institution')
@@ -176,9 +152,6 @@ Create Encounter::
     >>> encounter.next_appointment = appointment_next
 
     >>> encounter.fvyt = random_bool()
-
-    >>> appointment_next.tree_color
-    'black'
 
     >>> Encounter_Ambulatory = Model.get('gnuhealth.encounter.ambulatory')
 
@@ -320,20 +293,17 @@ Create Encounter::
 
     >>> appointment.save()
 
-    >>> appointment.save()
-
     >>> len(appointment.state_changes) == 3
     True
 
     >>> appointment.state_changes[0].target_state
     u'done'
 
-    >>> appointment.tree_color
-    'black'
+    >>> encounter.summary == None
+    False
 
     >>> COV.stop()
 
     >>> COV.save()
 
-    >>> COV.html_report()
-
+    >>> report = COV.html_report()

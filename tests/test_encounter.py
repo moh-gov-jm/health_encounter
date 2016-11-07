@@ -49,6 +49,54 @@ def suite():
                                         encoding='utf-8', 
                                         optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
                                         checker=None))
+    suite.addTests(doctest.DocFileSuite('test_encounter_summary.rst',
+                                        setUp=None, 
+                                        tearDown=None, 
+                                        encoding='utf-8', 
+                                        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
+                                        checker=None))
+    suite.addTests(doctest.DocFileSuite('test_encounter_short_summary.rst',
+                                        setUp=None, 
+                                        tearDown=None, 
+                                        encoding='utf-8', 
+                                        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
+                                        checker=None))
+    suite.addTests(doctest.DocFileSuite('test_encounter_upi.rst',
+                                        setUp=None, 
+                                        tearDown=None, 
+                                        encoding='utf-8', 
+                                        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
+                                        checker=None))
+    suite.addTests(doctest.DocFileSuite('test_encounter_medical_record_num.rst',
+                                        setUp=None, 
+                                        tearDown=None, 
+                                        encoding='utf-8', 
+                                        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
+                                        checker=None))
+    suite.addTests(doctest.DocFileSuite('test_encounter_sex_display.rst',
+                                        setUp=None, 
+                                        tearDown=None, 
+                                        encoding='utf-8', 
+                                        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
+                                        checker=None))
+    suite.addTests(doctest.DocFileSuite('test_encounter_age.rst',
+                                        setUp=None, 
+                                        tearDown=None, 
+                                        encoding='utf-8', 
+                                        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
+                                        checker=None))
+    suite.addTests(doctest.DocFileSuite('test_encounter_crypto_enabled.rst',
+                                        setUp=None, 
+                                        tearDown=None, 
+                                        encoding='utf-8', 
+                                        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
+                                        checker=None))
+    suite.addTests(doctest.DocFileSuite('test_encounter_clinicians.rst',
+                                        setUp=None, 
+                                        tearDown=None, 
+                                        encoding='utf-8', 
+                                        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE,
+                                        checker=None))
     return suite
 
 if __name__ == '__main__':
