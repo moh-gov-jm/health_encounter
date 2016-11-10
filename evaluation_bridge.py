@@ -1,7 +1,9 @@
 # Stuff that translates evaluations to encounters
+import sys
 from datetime import timedelta
 from trytond.modules.health.health import HealthInstitution
 from proteus import Model, config as pconfig
+from getpass import getpass
 
 DELAY = timedelta(0, 120)  # artificial 2 minute delay
 HERE = None
@@ -187,3 +189,24 @@ def convert_remaining_evaluations(db, passwd, conffile):
         print 'Some evaluations failed to convert (%d)' % len(bad_evals)
 
     return encounters, bad_evals
+
+usage = """
+%s <config_file> <database_name>
+
+Converts Evaluations to Encounters
+
+<config_file> = full path to trytond.conf
+<database_name> = name of database to import evaluations
+"""
+
+
+if __name__ == '__main__':
+    usages = usage % (sys.argv[0], )
+    if len(sys.argv) < 3:
+        print usages
+    elif sys.argv[1] in ['--help', '-h', '-?']:
+        print usages
+    else:
+        conffile, dbname = sys.argv[1:3]
+        dbpwd = getpass('Enter admin password: ')
+        e,b = convert_remaining_evaluations(dbname, dbpwd, conffile)
